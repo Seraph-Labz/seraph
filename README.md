@@ -1,2 +1,2 @@
 # seraph
-Cross-chain transaction explorer — Rust indexer for EVM, Solana, and Cosmos bridge protocols
+Cross-chain transaction explorer — Rust indexer for EVM chains, Solana, and Cosmos bridge protocols
