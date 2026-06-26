@@ -1,3 +1,95 @@
 [workspace]
 resolver = "2"
 members = ["indexer", "api", "shared"]
+
+[workspace.dependencies]
+# ── Internal ────────────────────────────────────────────────────────────────
+seraph-shared = { path = "shared" }
+
+# ── Async runtime ────────────────────────────────────────────────────────────
+# Tokio is the de-facto async runtime for Rust. "full" enables all features
+# (timers, fs, net, sync, macros). Both binaries need it; shared doesn't.
+tokio = { version = "1", features = ["full"] }
+
+# ── Web framework ────────────────────────────────────────────────────────────
+# Axum is the Tokio-native HTTP framework — thin layer over hyper, ergonomic
+# extractor/handler model, no macros required. Powers the /v1/ API.
+axum = { version = "0.8", features = ["macros"] }
+
+# ── Serialization ────────────────────────────────────────────────────────────
+# serde is the serialization backbone of the Rust ecosystem. The "derive"
+# feature lets you annotate structs with #[derive(Serialize, Deserialize)].
+serde = { version = "1", features = ["derive"] }
+# serde_json handles JSON encoding/decoding — used for JSONB metadata in
+# Postgres and for API request/response bodies.
+serde_json = { version = "1" }
+
+# ── Database ─────────────────────────────────────────────────────────────────
+# sqlx gives you async, compile-time verified SQL queries against real Postgres.
+# Features: runtime-tokio (async executor), tls-rustls (no OpenSSL dependency),
+# postgres (driver), uuid/chrono/json (type mappings for our columns).
+sqlx = { version = "0.8", features = [
+    "runtime-tokio",
+    "tls-rustls",
+    "postgres",
+    "uuid",
+    "chrono",
+    "json",
+] }
+
+# ── HTTP client ──────────────────────────────────────────────────────────────
+# reqwest is the standard async HTTP client. We use it for Helius webhooks
+# (Solana) and any bridge protocol REST APIs. rustls-tls avoids the OpenSSL
+# system dependency; default-features = false drops the native-tls backend.
+reqwest = { version = "0.12", default-features = false, features = [
+    "json",
+    "rustls-tls",
+] }
+
+# ── EVM ──────────────────────────────────────────────────────────────────────
+# alloy is the modern replacement for ethers-rs. It provides typed ABI
+# encoding, eth_getLogs, WebSocket provider, and transaction types — everything
+# needed to talk to EVM chains via Alchemy.
+alloy = { version = "2", features = ["full"] }
+
+# ── Async traits ─────────────────────────────────────────────────────────────
+# Rust's trait system doesn't natively support async fn in traits yet (stable
+# as of 1.75 for simple cases, but object-safe async traits still need this).
+# ProtocolAdapter uses it so adapters can do async I/O inside trait methods.
+async-trait = { version = "0.1" }
+
+# ── IDs and time ─────────────────────────────────────────────────────────────
+# uuid generates correlation IDs (v4 = random). serde feature adds
+# Serialize/Deserialize so UUIDs round-trip through JSON and sqlx columns.
+uuid = { version = "1", features = ["v4", "serde"] }
+# chrono provides DateTime<Utc> for event timestamps. serde feature handles
+# JSON encoding; the sqlx feature above maps it to Postgres TIMESTAMPTZ.
+chrono = { version = "0.4", features = ["serde"] }
+
+# ── Error handling ────────────────────────────────────────────────────────────
+# thiserror generates Display + Error impls from an enum via derive macros —
+# used in shared and library code where callers need to pattern-match errors.
+thiserror = { version = "2" }
+# anyhow is for binaries (indexer, api) where you just want to propagate errors
+# up with context. Pair: thiserror in libs, anyhow in binaries.
+anyhow = { version = "1" }
+
+# ── Observability ─────────────────────────────────────────────────────────────
+# tracing is structured, async-aware logging. You emit spans and events;
+# a subscriber decides where they go (stdout, Axiom, Sentry, etc.).
+tracing = { version = "0.1" }
+# tracing-subscriber wires up the subscriber — env-filter lets you control
+# log levels via RUST_LOG=info,indexer=debug at runtime.
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# ── Cache ────────────────────────────────────────────────────────────────────
+# deadpool-redis is an async connection pool for Redis. We use Upstash Redis
+# for tx hash lookups and status polling. deadpool manages pool lifecycle;
+# the redis feature pulls in the redis crate as the actual driver.
+deadpool-redis = { version = "0.18", features = ["rt_tokio_1"] }
+
+# ── Config / env ─────────────────────────────────────────────────────────────
+# dotenvy loads .env files into the process environment. Replacement for the
+# older dotenv crate. Both binaries use this to pull DATABASE_URL, ALCHEMY_KEY,
+# REDIS_URL, etc. from the environment.
+dotenvy = { version = "0.15" }
