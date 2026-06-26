@@ -1,0 +1,43 @@
+[graph]
+targets = []
+
+[advisories]
+version = 2
+ignore = []
+
+[licenses]
+version = 2
+# Allowlist of licenses acceptable in this project.
+# Bridge/chain crates commonly use Apache-2.0, MIT, BSD-2-Clause, BSD-3-Clause.
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Unicode-3.0",
+    "Zlib",
+]
+# Confidence threshold for license detection (0.0 - 1.0)
+confidence-threshold = 0.8
+
+[bans]
+version = 2
+# Deny multiple versions of the same crate unless explicitly allowed.
+multiple-versions = "warn"
+# Crates that must never appear in the dependency tree.
+deny = [
+    # Older openssl bindings — prefer rustls
+    { crate = "openssl", reason = "use rustls instead" },
+]
+# Crates with multiple versions we explicitly accept (common in the Rust ecosystem).
+skip = []
+skip-tree = []
+
+[sources]
+version = 2
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = []
