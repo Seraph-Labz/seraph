@@ -23,7 +23,6 @@ allow = [
 confidence-threshold = 0.8
 
 [bans]
-version = 2
 # Deny multiple versions of the same crate unless explicitly allowed.
 multiple-versions = "warn"
 # Crates that must never appear in the dependency tree.
@@ -36,7 +35,6 @@ skip = []
 skip-tree = []
 
 [sources]
-version = 2
 unknown-registry = "deny"
 unknown-git = "deny"
 allow-registry = ["https://github.com/rust-lang/crates.io-index"]
