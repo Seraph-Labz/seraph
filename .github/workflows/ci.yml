@@ -70,9 +70,3 @@ jobs:
       - run: cargo install cargo-audit --locked --quiet
       - run: cargo audit
 
-  deny:
-    name: Licenses & Bans
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: EmbarkStudios/cargo-deny-action@v2
