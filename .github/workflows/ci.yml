@@ -68,5 +68,7 @@ jobs:
         with:
           cache-targets: false
       - run: cargo install cargo-audit --locked --quiet
-      - run: cargo audit
+      # RUSTSEC-2023-0071: Marvin Attack in `rsa` — transitive dep via alloy,
+      # no fixed version available upstream. Ignored until alloy drops it.
+      - run: cargo audit --ignore RUSTSEC-2023-0071
 
