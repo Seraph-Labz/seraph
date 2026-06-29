@@ -179,14 +179,34 @@ pub mod chain {
     pub const COSMOS_HUB: &str = "cosmoshub";
     pub const OSMOSIS: &str = "osmosis";
 
-    pub fn ethereum() -> ChainId { ChainId::new(ETHEREUM) }
-    pub fn arbitrum() -> ChainId { ChainId::new(ARBITRUM) }
-    pub fn optimism() -> ChainId { ChainId::new(OPTIMISM) }
-    pub fn base() -> ChainId { ChainId::new(BASE) }
-    pub fn polygon() -> ChainId { ChainId::new(POLYGON) }
-    pub fn bsc() -> ChainId { ChainId::new(BSC) }
-    pub fn avalanche() -> ChainId { ChainId::new(AVALANCHE) }
-    pub fn solana() -> ChainId { ChainId::new(SOLANA) }
-    pub fn cosmos_hub() -> ChainId { ChainId::new(COSMOS_HUB) }
-    pub fn osmosis() -> ChainId { ChainId::new(OSMOSIS) }
+    pub fn ethereum() -> ChainId {
+        ChainId::new(ETHEREUM)
+    }
+    pub fn arbitrum() -> ChainId {
+        ChainId::new(ARBITRUM)
+    }
+    pub fn optimism() -> ChainId {
+        ChainId::new(OPTIMISM)
+    }
+    pub fn base() -> ChainId {
+        ChainId::new(BASE)
+    }
+    pub fn polygon() -> ChainId {
+        ChainId::new(POLYGON)
+    }
+    pub fn bsc() -> ChainId {
+        ChainId::new(BSC)
+    }
+    pub fn avalanche() -> ChainId {
+        ChainId::new(AVALANCHE)
+    }
+    pub fn solana() -> ChainId {
+        ChainId::new(SOLANA)
+    }
+    pub fn cosmos_hub() -> ChainId {
+        ChainId::new(COSMOS_HUB)
+    }
+    pub fn osmosis() -> ChainId {
+        ChainId::new(OSMOSIS)
+    }
 }

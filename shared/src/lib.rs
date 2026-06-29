@@ -8,5 +8,5 @@ pub use adapter::ProtocolAdapter;
 pub use config::Config;
 pub use error::{Result, SeraphError};
 pub use types::{
-    chain, ChainId, ChainRuntime, CrossChainEvent, RawLog, StitchedTransaction, TxStatus,
+    ChainId, ChainRuntime, CrossChainEvent, RawLog, StitchedTransaction, TxStatus, chain,
 };

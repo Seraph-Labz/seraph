@@ -42,8 +42,7 @@ impl TryFrom<CrossChainEventRow> for CrossChainEvent {
             token_address: row.token_address,
             protocol_id: row.protocol_id,
             correlation_id: row.correlation_id,
-            status: TxStatus::try_from(row.status.as_str())
-                .map_err(SeraphError::Parse)?,
+            status: TxStatus::try_from(row.status.as_str()).map_err(SeraphError::Parse)?,
             metadata: row.metadata,
             created_at: row.created_at,
             updated_at: row.updated_at,
@@ -105,8 +104,7 @@ impl TryFrom<StitchedTransactionRow> for StitchedTransaction {
             amount: row.amount,
             token_address: row.token_address,
             protocol_id: row.protocol_id,
-            status: TxStatus::try_from(row.status.as_str())
-                .map_err(SeraphError::Parse)?,
+            status: TxStatus::try_from(row.status.as_str()).map_err(SeraphError::Parse)?,
             source_event_id: row.source_event_id,
             dest_event_id: row.dest_event_id,
             created_at: row.created_at,

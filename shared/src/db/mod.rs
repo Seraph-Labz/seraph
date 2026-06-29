@@ -2,7 +2,7 @@ pub mod models;
 
 pub use models::{CrossChainEventRow, ProtocolAdapterRow, StitchedTransactionRow};
 
-use sqlx::{postgres::PgPoolOptions, PgPool};
+use sqlx::{PgPool, postgres::PgPoolOptions};
 use uuid::Uuid;
 
 use crate::error::{Result, SeraphError};
@@ -207,17 +207,12 @@ pub async fn get_stitched_txs_by_sender(
 
 // ── protocol_adapters ─────────────────────────────────────────────────────────
 
-pub async fn get_protocol_adapter(
-    pool: &PgPool,
-    id: &str,
-) -> Result<Option<ProtocolAdapterRow>> {
-    sqlx::query_as::<_, ProtocolAdapterRow>(
-        "SELECT * FROM protocol_adapters WHERE id = $1",
-    )
-    .bind(id)
-    .fetch_optional(pool)
-    .await
-    .map_err(SeraphError::Database)
+pub async fn get_protocol_adapter(pool: &PgPool, id: &str) -> Result<Option<ProtocolAdapterRow>> {
+    sqlx::query_as::<_, ProtocolAdapterRow>("SELECT * FROM protocol_adapters WHERE id = $1")
+        .bind(id)
+        .fetch_optional(pool)
+        .await
+        .map_err(SeraphError::Database)
 }
 
 pub async fn list_enabled_adapters(pool: &PgPool) -> Result<Vec<ProtocolAdapterRow>> {
@@ -229,10 +224,7 @@ pub async fn list_enabled_adapters(pool: &PgPool) -> Result<Vec<ProtocolAdapterR
     .map_err(SeraphError::Database)
 }
 
-pub async fn get_protocol_stats(
-    pool: &PgPool,
-    protocol_id: &str,
-) -> Result<ProtocolStats> {
+pub async fn get_protocol_stats(pool: &PgPool, protocol_id: &str) -> Result<ProtocolStats> {
     let row = sqlx::query_as::<_, (i64, i64, i64, i64)>(
         "SELECT
             COUNT(*) FILTER (WHERE status = 'completed') AS completed,
