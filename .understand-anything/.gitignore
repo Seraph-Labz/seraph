@@ -1,0 +1,10 @@
+.trash-*/
+tmp/
+intermediate/batch-*.json
+intermediate/assembled-graph.json
+intermediate/batches.json
+intermediate/assemble-review.json
+intermediate/layers.json
+intermediate/tour.json
+intermediate/review.json
+intermediate/fingerprint-input.json

@@ -1,0 +1,1274 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "93b0a5e9abcef7448ec075fe6ea595f99ac5408a",
+  "generatedAt": "2026-07-08T11:41:19.791Z",
+  "files": {
+    ".DS_Store": {
+      "filePath": ".DS_Store",
+      "contentHash": "ac1415491c91040776525a47073b638a0c219079d32d4ca7f199710c42ce3aa0",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 1,
+      "hasStructuralAnalysis": false
+    },
+    ".env.example": {
+      "filePath": ".env.example",
+      "contentHash": "9599e0061920278e37d4e919196c78e6dc091f019b23f25ed75f1205f75a1b48",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 7,
+      "hasStructuralAnalysis": true
+    },
+    ".github/pull_request_template.md": {
+      "filePath": ".github/pull_request_template.md",
+      "contentHash": "85624c654a2fec3362f354ff2e2e9d7500a224e818e6d3f8e450f2ce21d5827e",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 30,
+      "hasStructuralAnalysis": true
+    },
+    ".github/workflows/ci.yml": {
+      "filePath": ".github/workflows/ci.yml",
+      "contentHash": "517291018d8920e2fe608b3c4849e302b742f5f33284727e199358a979666488",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 75,
+      "hasStructuralAnalysis": true
+    },
+    ".understand-anything/.understandignore": {
+      "filePath": ".understand-anything/.understandignore",
+      "contentHash": "c04f252eef56147374f63b01593326324093e1e409a15c57b589e1d710813304",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 36,
+      "hasStructuralAnalysis": false
+    },
+    "api/Cargo.toml": {
+      "filePath": "api/Cargo.toml",
+      "contentHash": "2e2b1d70847fd16b83cd9ec9eb463692cbb370060cea0e7515ddc06e057a5257",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 18,
+      "hasStructuralAnalysis": true
+    },
+    "api/src/main.rs": {
+      "filePath": "api/src/main.rs",
+      "contentHash": "c8e0583694bb1e0188dbe28fe0d65ac1130723c55f968b6262b906c147f72549",
+      "functions": [
+        {
+          "name": "main",
+          "params": [],
+          "exported": false,
+          "lineCount": 3
+        }
+      ],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 4,
+      "hasStructuralAnalysis": true
+    },
+    "Cargo.toml": {
+      "filePath": "Cargo.toml",
+      "contentHash": "bc99201138cb4b6ef4a95089b460efb81153d0fb7587ebe65de888cdc41af558",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 96,
+      "hasStructuralAnalysis": true
+    },
+    "deny.toml": {
+      "filePath": "deny.toml",
+      "contentHash": "f58b8977bb4f5871a56f2d958f1704162362e4e653d8cc6c0d988643969271d3",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 42,
+      "hasStructuralAnalysis": true
+    },
+    "indexer/Cargo.toml": {
+      "filePath": "indexer/Cargo.toml",
+      "contentHash": "408b7e4253077dc85303c59cca7498dcb9559a87d75f55961e45e55a2206f0bc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 18,
+      "hasStructuralAnalysis": true
+    },
+    "indexer/src/adapters/mod.rs": {
+      "filePath": "indexer/src/adapters/mod.rs",
+      "contentHash": "ce85a2d7b671685073b1be406b7c7004ab781a02877b78bf4fae3f995e2e3a27",
+      "functions": [
+        {
+          "name": "parse_event",
+          "params": [
+            "_log"
+          ],
+          "returnType": "Option<CrossChainEvent>",
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "correlation_id",
+          "params": [
+            "event"
+          ],
+          "returnType": "String",
+          "exported": true,
+          "lineCount": 5
+        }
+      ],
+      "classes": [
+        {
+          "name": "AdapterDispatch",
+          "methods": [
+            "parse_event",
+            "correlation_id"
+          ],
+          "properties": [
+            "NoOp"
+          ],
+          "exported": true,
+          "lineCount": 4
+        }
+      ],
+      "imports": [
+        {
+          "source": "seraph_shared",
+          "specifiers": [
+            "CrossChainEvent",
+            "RawLog"
+          ]
+        }
+      ],
+      "exports": [
+        "AdapterDispatch",
+        "parse_event",
+        "correlation_id"
+      ],
+      "totalLines": 31,
+      "hasStructuralAnalysis": true
+    },
+    "indexer/src/log.rs": {
+      "filePath": "indexer/src/log.rs",
+      "contentHash": "86d323fc3773521ee8afc803006c2127a8f4250508fafa5f3c0f1d0ab40ac272",
+      "functions": [
+        {
+          "name": "to_raw",
+          "params": [
+            "log",
+            "chain_id"
+          ],
+          "returnType": "RawLog",
+          "exported": true,
+          "lineCount": 12
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "seraph_shared",
+          "specifiers": [
+            "ChainId",
+            "RawLog"
+          ]
+        }
+      ],
+      "exports": [
+        "to_raw"
+      ],
+      "totalLines": 16,
+      "hasStructuralAnalysis": true
+    },
+    "indexer/src/main.rs": {
+      "filePath": "indexer/src/main.rs",
+      "contentHash": "dcbd3fe36d12b1551656d29134ec43ab444676e2dd43b7e9a7df399f22efaeb6",
+      "functions": [
+        {
+          "name": "main",
+          "params": [],
+          "returnType": "anyhow::Result<()>",
+          "exported": false,
+          "lineCount": 98
+        }
+      ],
+      "classes": [
+        {
+          "name": "ChainConfig",
+          "methods": [],
+          "properties": [
+            "chain_id",
+            "wss_url",
+            "start_block"
+          ],
+          "exported": false,
+          "lineCount": 7
+        }
+      ],
+      "imports": [
+        {
+          "source": "anyhow",
+          "specifiers": [
+            "Context"
+          ]
+        },
+        {
+          "source": "seraph_shared",
+          "specifiers": [
+            "Config",
+            "chain",
+            "db"
+          ]
+        },
+        {
+          "source": "tracing",
+          "specifiers": [
+            "error",
+            "info"
+          ]
+        },
+        {
+          "source": "adapters",
+          "specifiers": [
+            "AdapterDispatch"
+          ]
+        },
+        {
+          "source": "runner",
+          "specifiers": [
+            "ChainRunner"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 120,
+      "hasStructuralAnalysis": true
+    },
+    "indexer/src/provider.rs": {
+      "filePath": "indexer/src/provider.rs",
+      "contentHash": "15f513a4b267c18273306c89223810a8ebb7208bc0146f38edffd8e7d6a05e7d",
+      "functions": [
+        {
+          "name": "connect",
+          "params": [
+            "url"
+          ],
+          "returnType": "Result<impl Provider + Clone + 'static>",
+          "exported": true,
+          "lineCount": 10
+        }
+      ],
+      "classes": [],
+      "imports": [
+        {
+          "source": "alloy::providers",
+          "specifiers": [
+            "Provider",
+            "ProviderBuilder"
+          ]
+        },
+        {
+          "source": "alloy::transports::ws",
+          "specifiers": [
+            "WsConnect"
+          ]
+        },
+        {
+          "source": "anyhow",
+          "specifiers": [
+            "Result"
+          ]
+        },
+        {
+          "source": "tracing",
+          "specifiers": [
+            "info"
+          ]
+        }
+      ],
+      "exports": [
+        "connect"
+      ],
+      "totalLines": 17,
+      "hasStructuralAnalysis": true
+    },
+    "indexer/src/runner.rs": {
+      "filePath": "indexer/src/runner.rs",
+      "contentHash": "09dc8e3e4e0a6a259f80e8a8454f8e08c1ebd58047c34f7dca91734f929eab89",
+      "functions": [
+        {
+          "name": "run",
+          "params": [],
+          "returnType": "Result<()>",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "backfill",
+          "params": [
+            "from",
+            "to"
+          ],
+          "returnType": "Result<()>",
+          "exported": false,
+          "lineCount": 16
+        },
+        {
+          "name": "fetch_chunk",
+          "params": [
+            "from",
+            "to"
+          ],
+          "returnType": "Result<()>",
+          "exported": false,
+          "lineCount": 13
+        },
+        {
+          "name": "subscribe",
+          "params": [
+            "from_block"
+          ],
+          "returnType": "Result<()>",
+          "exported": false,
+          "lineCount": 13
+        },
+        {
+          "name": "build_filter",
+          "params": [
+            "from",
+            "to"
+          ],
+          "returnType": "Filter",
+          "exported": false,
+          "lineCount": 10
+        },
+        {
+          "name": "process",
+          "params": [
+            "log"
+          ],
+          "exported": false,
+          "lineCount": 14
+        }
+      ],
+      "classes": [
+        {
+          "name": "ChainRunner",
+          "methods": [],
+          "properties": [
+            "chain_id",
+            "provider",
+            "adapters",
+            "watched_addresses",
+            "start_block",
+            "pool"
+          ],
+          "exported": true,
+          "lineCount": 10
+        }
+      ],
+      "imports": [
+        {
+          "source": "alloy::primitives",
+          "specifiers": [
+            "Address"
+          ]
+        },
+        {
+          "source": "alloy::providers",
+          "specifiers": [
+            "Provider"
+          ]
+        },
+        {
+          "source": "alloy::rpc::types",
+          "specifiers": [
+            "BlockNumberOrTag",
+            "Filter"
+          ]
+        },
+        {
+          "source": "anyhow",
+          "specifiers": [
+            "Result"
+          ]
+        },
+        {
+          "source": "futures",
+          "specifiers": [
+            "StreamExt"
+          ]
+        },
+        {
+          "source": "sqlx",
+          "specifiers": [
+            "PgPool"
+          ]
+        },
+        {
+          "source": "tracing",
+          "specifiers": [
+            "debug",
+            "error",
+            "info"
+          ]
+        },
+        {
+          "source": "seraph_shared",
+          "specifiers": [
+            "ChainId",
+            "db",
+            "db::CrossChainEventRow"
+          ]
+        },
+        {
+          "source": "crate::adapters",
+          "specifiers": [
+            "AdapterDispatch"
+          ]
+        },
+        {
+          "source": "crate",
+          "specifiers": [
+            "log"
+          ]
+        }
+      ],
+      "exports": [
+        "ChainRunner",
+        "run"
+      ],
+      "totalLines": 116,
+      "hasStructuralAnalysis": true
+    },
+    "README.md": {
+      "filePath": "README.md",
+      "contentHash": "ad594d4f18d6c487807175372b3eac62e270c36ad08c488b2b135ca8d4a808bc",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 3,
+      "hasStructuralAnalysis": true
+    },
+    "rust-toolchain.toml": {
+      "filePath": "rust-toolchain.toml",
+      "contentHash": "e59c5da37d1f9f4e0f815bc188cb6056fc7410c9cdaa9673c2d44da557c75d12",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 4,
+      "hasStructuralAnalysis": true
+    },
+    "shared/Cargo.toml": {
+      "filePath": "shared/Cargo.toml",
+      "contentHash": "bab3809f7ad5b05eeff9f43448b6034a190242ccc4c3afb6378fda96ef57d6ed",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 14,
+      "hasStructuralAnalysis": true
+    },
+    "shared/migrations/0001_create_protocol_adapters.sql": {
+      "filePath": "shared/migrations/0001_create_protocol_adapters.sql",
+      "contentHash": "75199bd2a2a1e7da47a401204234b8167716520a39cb5eaa42adbc988d035c99",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 21,
+      "hasStructuralAnalysis": true
+    },
+    "shared/migrations/0002_create_cross_chain_events.sql": {
+      "filePath": "shared/migrations/0002_create_cross_chain_events.sql",
+      "contentHash": "bda39f41397f02d4544fd437d672bfc1003939af8f1d2eeb65af065489eed424",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 34,
+      "hasStructuralAnalysis": true
+    },
+    "shared/migrations/0003_create_stitched_transactions.sql": {
+      "filePath": "shared/migrations/0003_create_stitched_transactions.sql",
+      "contentHash": "6b8b5c4df6eaf783b443194fbc2c1b1e82f39f494cabec0888aa53343d63e481",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    "shared/src/adapter.rs": {
+      "filePath": "shared/src/adapter.rs",
+      "contentHash": "455f0660153b6d55e6e46c28ae3966294dbc4c8a0b5d6d9251836bfef67d888b",
+      "functions": [],
+      "classes": [
+        {
+          "name": "ProtocolAdapter",
+          "methods": [
+            "protocol_id",
+            "chain_runtime",
+            "parse_event",
+            "correlation_id",
+            "status",
+            "supported_chains"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 21
+        }
+      ],
+      "imports": [
+        {
+          "source": "async_trait",
+          "specifiers": [
+            "async_trait"
+          ]
+        },
+        {
+          "source": "crate::types",
+          "specifiers": [
+            "ChainId",
+            "ChainRuntime",
+            "CrossChainEvent",
+            "RawLog",
+            "TxStatus"
+          ]
+        }
+      ],
+      "exports": [
+        "ProtocolAdapter"
+      ],
+      "totalLines": 31,
+      "hasStructuralAnalysis": true
+    },
+    "shared/src/config.rs": {
+      "filePath": "shared/src/config.rs",
+      "contentHash": "6a08fdbe326e868c2efcc29092a9c0212059ecdf1027be84e1587f473bc567a1",
+      "functions": [
+        {
+          "name": "from_env",
+          "params": [],
+          "returnType": "Result<Self>",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "require_env",
+          "params": [
+            "key"
+          ],
+          "returnType": "Result<String>",
+          "exported": false,
+          "lineCount": 3
+        }
+      ],
+      "classes": [
+        {
+          "name": "Config",
+          "methods": [
+            "from_env"
+          ],
+          "properties": [
+            "database_url",
+            "redis_url",
+            "alchemy_api_key",
+            "helius_api_key",
+            "helius_webhook_secret",
+            "sentry_dsn",
+            "port"
+          ],
+          "exported": true,
+          "lineCount": 11
+        }
+      ],
+      "imports": [
+        {
+          "source": "crate::error",
+          "specifiers": [
+            "Result",
+            "SeraphError"
+          ]
+        }
+      ],
+      "exports": [
+        "Config",
+        "from_env"
+      ],
+      "totalLines": 40,
+      "hasStructuralAnalysis": true
+    },
+    "shared/src/db/mod.rs": {
+      "filePath": "shared/src/db/mod.rs",
+      "contentHash": "73485e3df40bef9cf6fb9f41aedc170d6806c8837763cb0db1418126775e5abc",
+      "functions": [
+        {
+          "name": "connect",
+          "params": [
+            "database_url"
+          ],
+          "returnType": "Result<PgPool>",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "run_migrations",
+          "params": [
+            "pool"
+          ],
+          "returnType": "Result<()>",
+          "exported": true,
+          "lineCount": 6
+        },
+        {
+          "name": "insert_event",
+          "params": [
+            "pool",
+            "row"
+          ],
+          "returnType": "Result<()>",
+          "exported": true,
+          "lineCount": 28
+        },
+        {
+          "name": "get_event_by_tx_hash",
+          "params": [
+            "pool",
+            "tx_hash"
+          ],
+          "returnType": "Result<Option<CrossChainEventRow>>",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "get_events_by_correlation_id",
+          "params": [
+            "pool",
+            "correlation_id"
+          ],
+          "returnType": "Result<Vec<CrossChainEventRow>>",
+          "exported": true,
+          "lineCount": 14
+        },
+        {
+          "name": "get_events_by_sender",
+          "params": [
+            "pool",
+            "address",
+            "limit",
+            "offset"
+          ],
+          "returnType": "Result<Vec<CrossChainEventRow>>",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "get_unstitched_events",
+          "params": [
+            "pool"
+          ],
+          "returnType": "Result<Vec<CrossChainEventRow>>",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "update_event_status",
+          "params": [
+            "pool",
+            "id",
+            "status"
+          ],
+          "returnType": "Result<()>",
+          "exported": true,
+          "lineCount": 13
+        },
+        {
+          "name": "upsert_stitched_tx",
+          "params": [
+            "pool",
+            "row"
+          ],
+          "returnType": "Result<()>",
+          "exported": true,
+          "lineCount": 33
+        },
+        {
+          "name": "get_stitched_tx_by_correlation_id",
+          "params": [
+            "pool",
+            "correlation_id"
+          ],
+          "returnType": "Result<Option<StitchedTransactionRow>>",
+          "exported": true,
+          "lineCount": 12
+        },
+        {
+          "name": "get_stitched_txs_by_sender",
+          "params": [
+            "pool",
+            "address",
+            "limit",
+            "offset"
+          ],
+          "returnType": "Result<Vec<StitchedTransactionRow>>",
+          "exported": true,
+          "lineCount": 19
+        },
+        {
+          "name": "get_protocol_adapter",
+          "params": [
+            "pool",
+            "id"
+          ],
+          "returnType": "Result<Option<ProtocolAdapterRow>>",
+          "exported": true,
+          "lineCount": 7
+        },
+        {
+          "name": "list_enabled_adapters",
+          "params": [
+            "pool"
+          ],
+          "returnType": "Result<Vec<ProtocolAdapterRow>>",
+          "exported": true,
+          "lineCount": 8
+        },
+        {
+          "name": "get_protocol_stats",
+          "params": [
+            "pool",
+            "protocol_id"
+          ],
+          "returnType": "Result<ProtocolStats>",
+          "exported": true,
+          "lineCount": 23
+        }
+      ],
+      "classes": [
+        {
+          "name": "ProtocolStats",
+          "methods": [],
+          "properties": [
+            "protocol_id",
+            "completed",
+            "pending",
+            "inflight",
+            "failed"
+          ],
+          "exported": true,
+          "lineCount": 7
+        }
+      ],
+      "imports": [
+        {
+          "source": "models",
+          "specifiers": [
+            "CrossChainEventRow",
+            "ProtocolAdapterRow",
+            "StitchedTransactionRow"
+          ]
+        },
+        {
+          "source": "sqlx",
+          "specifiers": [
+            "PgPool",
+            "postgres::PgPoolOptions"
+          ]
+        },
+        {
+          "source": "uuid",
+          "specifiers": [
+            "Uuid"
+          ]
+        },
+        {
+          "source": "crate::error",
+          "specifiers": [
+            "Result",
+            "SeraphError"
+          ]
+        },
+        {
+          "source": "serde",
+          "specifiers": [
+            "Deserialize",
+            "Serialize"
+          ]
+        }
+      ],
+      "exports": [
+        "connect",
+        "run_migrations",
+        "insert_event",
+        "get_event_by_tx_hash",
+        "get_events_by_correlation_id",
+        "get_events_by_sender",
+        "get_unstitched_events",
+        "update_event_status",
+        "upsert_stitched_tx",
+        "get_stitched_tx_by_correlation_id",
+        "get_stitched_txs_by_sender",
+        "get_protocol_adapter",
+        "list_enabled_adapters",
+        "get_protocol_stats",
+        "ProtocolStats"
+      ],
+      "totalLines": 261,
+      "hasStructuralAnalysis": true
+    },
+    "shared/src/db/models.rs": {
+      "filePath": "shared/src/db/models.rs",
+      "contentHash": "a17796e76bc823bc81518c4e75b9e991ce82dfecbd1aa44040356df4e455b379",
+      "functions": [
+        {
+          "name": "try_from",
+          "params": [
+            "row"
+          ],
+          "returnType": "Result<Self, SeraphError>",
+          "exported": false,
+          "lineCount": 18
+        },
+        {
+          "name": "from",
+          "params": [
+            "e"
+          ],
+          "returnType": "Self",
+          "exported": false,
+          "lineCount": 18
+        },
+        {
+          "name": "try_from",
+          "params": [
+            "row"
+          ],
+          "returnType": "Result<Self, SeraphError>",
+          "exported": false,
+          "lineCount": 18
+        },
+        {
+          "name": "from",
+          "params": [
+            "tx"
+          ],
+          "returnType": "Self",
+          "exported": false,
+          "lineCount": 18
+        }
+      ],
+      "classes": [
+        {
+          "name": "CrossChainEventRow",
+          "methods": [
+            "from"
+          ],
+          "properties": [
+            "id",
+            "source_tx_hash",
+            "source_chain",
+            "dest_chain",
+            "sender_address",
+            "receiver_address",
+            "amount",
+            "token_address",
+            "protocol_id",
+            "correlation_id",
+            "status",
+            "metadata",
+            "created_at",
+            "updated_at"
+          ],
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "StitchedTransactionRow",
+          "methods": [
+            "from"
+          ],
+          "properties": [
+            "id",
+            "correlation_id",
+            "source_chain",
+            "dest_chain",
+            "sender_address",
+            "receiver_address",
+            "amount",
+            "token_address",
+            "protocol_id",
+            "status",
+            "source_event_id",
+            "dest_event_id",
+            "created_at",
+            "updated_at"
+          ],
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "ProtocolAdapterRow",
+          "methods": [],
+          "properties": [
+            "id",
+            "name",
+            "chain_runtime",
+            "supported_chains",
+            "enabled",
+            "created_at"
+          ],
+          "exported": true,
+          "lineCount": 8
+        }
+      ],
+      "imports": [
+        {
+          "source": "chrono",
+          "specifiers": [
+            "DateTime",
+            "Utc"
+          ]
+        },
+        {
+          "source": "serde",
+          "specifiers": [
+            "Deserialize",
+            "Serialize"
+          ]
+        },
+        {
+          "source": "sqlx",
+          "specifiers": [
+            "FromRow"
+          ]
+        },
+        {
+          "source": "uuid",
+          "specifiers": [
+            "Uuid"
+          ]
+        },
+        {
+          "source": "crate",
+          "specifiers": [
+            "error::SeraphError"
+          ]
+        }
+      ],
+      "exports": [
+        "CrossChainEventRow",
+        "StitchedTransactionRow",
+        "ProtocolAdapterRow"
+      ],
+      "totalLines": 147,
+      "hasStructuralAnalysis": true
+    },
+    "shared/src/error.rs": {
+      "filePath": "shared/src/error.rs",
+      "contentHash": "128db8f2e005b8a4b9619be792ded70b580a0eed1c6faea1e13a67a2e9e412d2",
+      "functions": [],
+      "classes": [
+        {
+          "name": "SeraphError",
+          "methods": [],
+          "properties": [
+            "Database",
+            "Migration",
+            "Parse",
+            "Config",
+            "NotFound",
+            "Protocol"
+          ],
+          "exported": true,
+          "lineCount": 19
+        }
+      ],
+      "imports": [
+        {
+          "source": "thiserror",
+          "specifiers": [
+            "Error"
+          ]
+        }
+      ],
+      "exports": [
+        "SeraphError"
+      ],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    "shared/src/lib.rs": {
+      "filePath": "shared/src/lib.rs",
+      "contentHash": "9b8d1a69861e1a0a10b3b31593dfe977b9f5a58b3bdfbcad59d06eac9316922d",
+      "functions": [],
+      "classes": [],
+      "imports": [
+        {
+          "source": "adapter",
+          "specifiers": [
+            "ProtocolAdapter"
+          ]
+        },
+        {
+          "source": "config",
+          "specifiers": [
+            "Config"
+          ]
+        },
+        {
+          "source": "error",
+          "specifiers": [
+            "Result",
+            "SeraphError"
+          ]
+        },
+        {
+          "source": "types",
+          "specifiers": [
+            "ChainId",
+            "ChainRuntime",
+            "CrossChainEvent",
+            "RawLog",
+            "StitchedTransaction",
+            "TxStatus",
+            "chain"
+          ]
+        }
+      ],
+      "exports": [],
+      "totalLines": 13,
+      "hasStructuralAnalysis": true
+    },
+    "shared/src/types.rs": {
+      "filePath": "shared/src/types.rs",
+      "contentHash": "885952f520e118643b6be36ff0dc44786ffa6b632161f42f2d144d7e006a37bc",
+      "functions": [
+        {
+          "name": "new",
+          "params": [
+            "id"
+          ],
+          "returnType": "Self",
+          "exported": true,
+          "lineCount": 3
+        },
+        {
+          "name": "fmt",
+          "params": [
+            "f"
+          ],
+          "returnType": "std::fmt::Result",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "from",
+          "params": [
+            "s"
+          ],
+          "returnType": "Self",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "from",
+          "params": [
+            "s"
+          ],
+          "returnType": "Self",
+          "exported": false,
+          "lineCount": 3
+        },
+        {
+          "name": "fmt",
+          "params": [
+            "f"
+          ],
+          "returnType": "std::fmt::Result",
+          "exported": false,
+          "lineCount": 7
+        },
+        {
+          "name": "try_from",
+          "params": [
+            "s"
+          ],
+          "returnType": "std::result::Result<Self, String>",
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "fmt",
+          "params": [
+            "f"
+          ],
+          "returnType": "std::fmt::Result",
+          "exported": false,
+          "lineCount": 8
+        },
+        {
+          "name": "try_from",
+          "params": [
+            "s"
+          ],
+          "returnType": "std::result::Result<Self, String>",
+          "exported": false,
+          "lineCount": 9
+        }
+      ],
+      "classes": [
+        {
+          "name": "ChainId",
+          "methods": [
+            "new",
+            "fmt",
+            "from",
+            "from"
+          ],
+          "properties": [],
+          "exported": true,
+          "lineCount": 1
+        },
+        {
+          "name": "ChainRuntime",
+          "methods": [
+            "fmt",
+            "try_from"
+          ],
+          "properties": [
+            "Evm",
+            "Solana",
+            "Cosmos"
+          ],
+          "exported": true,
+          "lineCount": 5
+        },
+        {
+          "name": "TxStatus",
+          "methods": [
+            "fmt",
+            "try_from"
+          ],
+          "properties": [
+            "Pending",
+            "Inflight",
+            "Completed",
+            "Failed"
+          ],
+          "exported": true,
+          "lineCount": 10
+        },
+        {
+          "name": "CrossChainEvent",
+          "methods": [],
+          "properties": [
+            "id",
+            "source_tx_hash",
+            "source_chain",
+            "dest_chain",
+            "sender_address",
+            "receiver_address",
+            "amount",
+            "token_address",
+            "protocol_id",
+            "correlation_id",
+            "status",
+            "metadata",
+            "created_at",
+            "updated_at"
+          ],
+          "exported": true,
+          "lineCount": 23
+        },
+        {
+          "name": "StitchedTransaction",
+          "methods": [],
+          "properties": [
+            "id",
+            "correlation_id",
+            "source_chain",
+            "dest_chain",
+            "sender_address",
+            "receiver_address",
+            "amount",
+            "token_address",
+            "protocol_id",
+            "status",
+            "source_event_id",
+            "dest_event_id",
+            "created_at",
+            "updated_at"
+          ],
+          "exported": true,
+          "lineCount": 16
+        },
+        {
+          "name": "RawLog",
+          "methods": [],
+          "properties": [
+            "address",
+            "topics",
+            "data",
+            "block_number",
+            "tx_hash",
+            "log_index",
+            "chain_id"
+          ],
+          "exported": true,
+          "lineCount": 13
+        }
+      ],
+      "imports": [
+        {
+          "source": "chrono",
+          "specifiers": [
+            "DateTime",
+            "Utc"
+          ]
+        },
+        {
+          "source": "serde",
+          "specifiers": [
+            "Deserialize",
+            "Serialize"
+          ]
+        },
+        {
+          "source": "uuid",
+          "specifiers": [
+            "Uuid"
+          ]
+        }
+      ],
+      "exports": [
+        "ChainId",
+        "new",
+        "ChainRuntime",
+        "TxStatus",
+        "CrossChainEvent",
+        "StitchedTransaction",
+        "RawLog"
+      ],
+      "totalLines": 213,
+      "hasStructuralAnalysis": true
+    }
+  }
+}

@@ -1,0 +1,242 @@
+{
+  "name": "seraph",
+  "description": "Cross-chain transaction explorer — Rust indexer for EVM chains, Solana, and Cosmos bridge protocols.",
+  "languages": [
+    "config",
+    "markdown",
+    "rust",
+    "sql",
+    "toml",
+    "unknown",
+    "yaml"
+  ],
+  "frameworks": [
+    "axum",
+    "GitHub Actions",
+    "serde",
+    "tokio"
+  ],
+  "files": [
+    {
+      "path": ".DS_Store",
+      "language": "unknown",
+      "sizeLines": 0,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".env.example",
+      "language": "config",
+      "sizeLines": 6,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".github/pull_request_template.md",
+      "language": "markdown",
+      "sizeLines": 29,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "language": "yaml",
+      "sizeLines": 74,
+      "fileCategory": "infra"
+    },
+    {
+      "path": ".understand-anything/.understandignore",
+      "language": "unknown",
+      "sizeLines": 35,
+      "fileCategory": "code"
+    },
+    {
+      "path": "api/Cargo.toml",
+      "language": "toml",
+      "sizeLines": 17,
+      "fileCategory": "config"
+    },
+    {
+      "path": "api/src/main.rs",
+      "language": "rust",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": "Cargo.toml",
+      "language": "toml",
+      "sizeLines": 95,
+      "fileCategory": "config"
+    },
+    {
+      "path": "deny.toml",
+      "language": "toml",
+      "sizeLines": 41,
+      "fileCategory": "config"
+    },
+    {
+      "path": "indexer/Cargo.toml",
+      "language": "toml",
+      "sizeLines": 17,
+      "fileCategory": "config"
+    },
+    {
+      "path": "indexer/src/adapters/mod.rs",
+      "language": "rust",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "indexer/src/log.rs",
+      "language": "rust",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "indexer/src/main.rs",
+      "language": "rust",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "indexer/src/provider.rs",
+      "language": "rust",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "indexer/src/runner.rs",
+      "language": "rust",
+      "sizeLines": 115,
+      "fileCategory": "code"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 2,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "rust-toolchain.toml",
+      "language": "toml",
+      "sizeLines": 3,
+      "fileCategory": "config"
+    },
+    {
+      "path": "shared/Cargo.toml",
+      "language": "toml",
+      "sizeLines": 13,
+      "fileCategory": "config"
+    },
+    {
+      "path": "shared/migrations/0001_create_protocol_adapters.sql",
+      "language": "sql",
+      "sizeLines": 20,
+      "fileCategory": "data"
+    },
+    {
+      "path": "shared/migrations/0002_create_cross_chain_events.sql",
+      "language": "sql",
+      "sizeLines": 33,
+      "fileCategory": "data"
+    },
+    {
+      "path": "shared/migrations/0003_create_stitched_transactions.sql",
+      "language": "sql",
+      "sizeLines": 24,
+      "fileCategory": "data"
+    },
+    {
+      "path": "shared/src/adapter.rs",
+      "language": "rust",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "shared/src/config.rs",
+      "language": "rust",
+      "sizeLines": 39,
+      "fileCategory": "code"
+    },
+    {
+      "path": "shared/src/db/mod.rs",
+      "language": "rust",
+      "sizeLines": 260,
+      "fileCategory": "code"
+    },
+    {
+      "path": "shared/src/db/models.rs",
+      "language": "rust",
+      "sizeLines": 146,
+      "fileCategory": "code"
+    },
+    {
+      "path": "shared/src/error.rs",
+      "language": "rust",
+      "sizeLines": 24,
+      "fileCategory": "code"
+    },
+    {
+      "path": "shared/src/lib.rs",
+      "language": "rust",
+      "sizeLines": 12,
+      "fileCategory": "code"
+    },
+    {
+      "path": "shared/src/types.rs",
+      "language": "rust",
+      "sizeLines": 212,
+      "fileCategory": "code"
+    }
+  ],
+  "totalFiles": 28,
+  "filteredByIgnore": 0,
+  "estimatedComplexity": "small",
+  "importMap": {
+    ".DS_Store": [],
+    ".env.example": [],
+    ".github/pull_request_template.md": [],
+    ".github/workflows/ci.yml": [],
+    ".understand-anything/.understandignore": [],
+    "api/Cargo.toml": [],
+    "api/src/main.rs": [],
+    "Cargo.toml": [],
+    "deny.toml": [],
+    "indexer/Cargo.toml": [],
+    "indexer/src/adapters/mod.rs": [],
+    "indexer/src/log.rs": [],
+    "indexer/src/main.rs": [
+      "indexer/src/adapters/mod.rs",
+      "indexer/src/log.rs",
+      "indexer/src/provider.rs",
+      "indexer/src/runner.rs"
+    ],
+    "indexer/src/provider.rs": [],
+    "indexer/src/runner.rs": [
+      "indexer/src/adapters/mod.rs"
+    ],
+    "README.md": [],
+    "rust-toolchain.toml": [],
+    "shared/Cargo.toml": [],
+    "shared/migrations/0001_create_protocol_adapters.sql": [],
+    "shared/migrations/0002_create_cross_chain_events.sql": [],
+    "shared/migrations/0003_create_stitched_transactions.sql": [],
+    "shared/src/adapter.rs": [
+      "shared/src/types.rs"
+    ],
+    "shared/src/config.rs": [
+      "shared/src/error.rs"
+    ],
+    "shared/src/db/mod.rs": [
+      "shared/src/db/models.rs",
+      "shared/src/error.rs"
+    ],
+    "shared/src/db/models.rs": [],
+    "shared/src/error.rs": [],
+    "shared/src/lib.rs": [
+      "shared/src/adapter.rs",
+      "shared/src/config.rs",
+      "shared/src/db/mod.rs",
+      "shared/src/error.rs",
+      "shared/src/types.rs"
+    ],
+    "shared/src/types.rs": []
+  }
+}

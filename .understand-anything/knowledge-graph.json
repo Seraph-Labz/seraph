@@ -1,0 +1,2124 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "name": "seraph",
+    "languages": [
+      "Rust",
+      "SQL",
+      "TOML",
+      "YAML",
+      "Markdown"
+    ],
+    "frameworks": [
+      "axum",
+      "tokio",
+      "alloy-rs",
+      "sqlx",
+      "serde"
+    ],
+    "description": "Cross-chain transaction explorer \u2014 Rust indexer for EVM chains, Solana, and Cosmos bridge protocols",
+    "analyzedAt": "2026-07-08T11:38:57.089390+00:00",
+    "gitCommitHash": "93b0a5e9abcef7448ec075fe6ea595f99ac5408a"
+  },
+  "nodes": [
+    {
+      "id": "file:indexer/src/adapters/mod.rs",
+      "type": "file",
+      "name": "mod.rs",
+      "filePath": "indexer/src/adapters/mod.rs",
+      "summary": "Defines the AdapterDispatch enum used for zero-cost enum dispatch across bridge protocol adapters, along with top-level parse_event and correlation_id routing functions that delegate to the matched variant.",
+      "tags": [
+        "adapter",
+        "enum-dispatch",
+        "protocol",
+        "barrel",
+        "utility"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Uses Rust enum dispatch instead of dyn trait objects to avoid heap allocation per call on the hot event-processing path."
+    },
+    {
+      "id": "file:indexer/src/log.rs",
+      "type": "file",
+      "name": "log.rs",
+      "filePath": "indexer/src/log.rs",
+      "summary": "Provides the to_raw conversion utility that transforms alloy-rs Log objects into the project's RawLog format consumed by protocol adapters.",
+      "tags": [
+        "utility",
+        "conversion",
+        "event-processing",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:indexer/src/main.rs",
+      "type": "file",
+      "name": "main.rs",
+      "filePath": "indexer/src/main.rs",
+      "summary": "Async Tokio entry point for the Seraph indexer binary; reads environment config, connects to the database, spawns per-chain ChainRunner tasks over WebSocket EVM providers, and handles graceful shutdown on Ctrl-C.",
+      "tags": [
+        "entry-point",
+        "async",
+        "orchestration",
+        "tokio"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Uses #[tokio::main] with multi-chain task spawning; each chain gets an independent tokio::spawn handle that is aborted on Ctrl-C signal."
+    },
+    {
+      "id": "file:indexer/src/provider.rs",
+      "type": "file",
+      "name": "provider.rs",
+      "filePath": "indexer/src/provider.rs",
+      "summary": "Creates an alloy-rs WebSocket provider connection, verifies it by fetching the connected chain ID, and returns a WsProvider ready for use by ChainRunner.",
+      "tags": [
+        "utility",
+        "websocket",
+        "connection",
+        "provider"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:indexer/src/runner.rs",
+      "type": "file",
+      "name": "runner.rs",
+      "filePath": "indexer/src/runner.rs",
+      "summary": "Implements ChainRunner, the core per-chain indexer loop that performs historical backfilling via chunked eth_getLogs calls and real-time log subscription, routing parsed events through the adapter dispatch layer and persisting them to PostgreSQL.",
+      "tags": [
+        "service",
+        "indexer",
+        "event-handler",
+        "async",
+        "blockchain"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Backfill is chunked to avoid RPC payload limits; subscribe uses alloy-rs subscribe_logs which streams via WebSocket. Both paths converge on the same process() method."
+    },
+    {
+      "id": "class:indexer/src/adapters/mod.rs:AdapterDispatch",
+      "type": "class",
+      "name": "AdapterDispatch",
+      "filePath": "indexer/src/adapters/mod.rs",
+      "lineRange": [
+        8,
+        11
+      ],
+      "summary": "Enum that dispatches protocol adapter operations (event parsing, correlation ID generation) to the correct bridge-specific implementation without dynamic dispatch overhead.",
+      "tags": [
+        "adapter",
+        "enum-dispatch",
+        "protocol"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:indexer/src/adapters/mod.rs:parse_event",
+      "type": "function",
+      "name": "parse_event",
+      "filePath": "indexer/src/adapters/mod.rs",
+      "lineRange": [
+        16,
+        20
+      ],
+      "summary": "Routes a raw log to the correct adapter variant's event parser, returning an optional CrossChainEvent.",
+      "tags": [
+        "adapter",
+        "event-processing",
+        "routing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:indexer/src/adapters/mod.rs:correlation_id",
+      "type": "function",
+      "name": "correlation_id",
+      "filePath": "indexer/src/adapters/mod.rs",
+      "lineRange": [
+        25,
+        29
+      ],
+      "summary": "Extracts and returns the correlation ID string from a CrossChainEvent by delegating to the matched adapter variant.",
+      "tags": [
+        "adapter",
+        "correlation",
+        "routing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:indexer/src/log.rs:to_raw",
+      "type": "function",
+      "name": "to_raw",
+      "filePath": "indexer/src/log.rs",
+      "lineRange": [
+        4,
+        15
+      ],
+      "summary": "Converts an alloy-rs Log into a RawLog struct by extracting address, topics, data bytes, transaction hash, block number, and chain ID.",
+      "tags": [
+        "utility",
+        "conversion",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:indexer/src/main.rs:main",
+      "type": "function",
+      "name": "main",
+      "filePath": "indexer/src/main.rs",
+      "lineRange": [
+        22,
+        119
+      ],
+      "summary": "Initializes logging and environment, connects to the database and runs migrations, then spawns a ChainRunner task per configured EVM chain and awaits Ctrl-C for graceful shutdown.",
+      "tags": [
+        "entry-point",
+        "orchestration",
+        "async",
+        "tokio"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:indexer/src/provider.rs:connect",
+      "type": "function",
+      "name": "connect",
+      "filePath": "indexer/src/provider.rs",
+      "lineRange": [
+        7,
+        16
+      ],
+      "summary": "Establishes an alloy-rs WebSocket provider from a URL string, probes it with get_chain_id, and returns the verified provider alongside the detected chain ID.",
+      "tags": [
+        "utility",
+        "websocket",
+        "connection"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:indexer/src/runner.rs:ChainRunner",
+      "type": "class",
+      "name": "ChainRunner",
+      "filePath": "indexer/src/runner.rs",
+      "lineRange": [
+        17,
+        26
+      ],
+      "summary": "Holds all per-chain state needed for indexing: chain ID, WsProvider, adapter dispatch enum, optional watched address filter, starting block, and a DB connection pool.",
+      "tags": [
+        "service",
+        "indexer",
+        "blockchain",
+        "state"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:indexer/src/runner.rs:run",
+      "type": "function",
+      "name": "run",
+      "filePath": "indexer/src/runner.rs",
+      "lineRange": [
+        31,
+        37
+      ],
+      "summary": "Orchestrates the full indexer lifecycle for one chain: fetches the current tip block, triggers historical backfill, then enters the live subscription loop.",
+      "tags": [
+        "indexer",
+        "orchestration",
+        "async"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:indexer/src/runner.rs:backfill",
+      "type": "function",
+      "name": "backfill",
+      "filePath": "indexer/src/runner.rs",
+      "lineRange": [
+        41,
+        56
+      ],
+      "summary": "Iterates over historical block ranges in fixed-size chunks from start_block to the current tip, calling fetch_chunk for each range to retrieve and persist past events.",
+      "tags": [
+        "indexer",
+        "backfill",
+        "async",
+        "blockchain"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:indexer/src/runner.rs:fetch_chunk",
+      "type": "function",
+      "name": "fetch_chunk",
+      "filePath": "indexer/src/runner.rs",
+      "lineRange": [
+        58,
+        70
+      ],
+      "summary": "Builds a block-range log filter, calls eth_getLogs via the alloy provider for one chunk, and passes each returned log through the process pipeline.",
+      "tags": [
+        "indexer",
+        "event-processing",
+        "blockchain"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:indexer/src/runner.rs:subscribe",
+      "type": "function",
+      "name": "subscribe",
+      "filePath": "indexer/src/runner.rs",
+      "lineRange": [
+        74,
+        86
+      ],
+      "summary": "Opens a real-time WebSocket log subscription starting from a given block, consuming each incoming log via the process pipeline in a continuous async stream loop.",
+      "tags": [
+        "indexer",
+        "websocket",
+        "realtime",
+        "async"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:indexer/src/runner.rs:build_filter",
+      "type": "function",
+      "name": "build_filter",
+      "filePath": "indexer/src/runner.rs",
+      "lineRange": [
+        90,
+        99
+      ],
+      "summary": "Constructs an alloy-rs Filter for a block range, optionally restricting it to the configured watched contract addresses.",
+      "tags": [
+        "indexer",
+        "blockchain",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:indexer/src/runner.rs:process",
+      "type": "function",
+      "name": "process",
+      "filePath": "indexer/src/runner.rs",
+      "lineRange": [
+        101,
+        114
+      ],
+      "summary": "Converts a raw alloy Log to RawLog, routes it through the adapter dispatch layer for event parsing, and if a CrossChainEvent is produced, persists it to the database via db::insert_event.",
+      "tags": [
+        "event-handler",
+        "adapter",
+        "database",
+        "event-processing"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:shared/src/adapter.rs",
+      "type": "file",
+      "name": "adapter.rs",
+      "filePath": "shared/src/adapter.rs",
+      "summary": "Defines the `ProtocolAdapter` async trait \u2014 the core abstraction all bridge protocol adapters must implement, covering protocol identity, chain runtime, event parsing, correlation ID computation, status resolution, and supported chain enumeration.",
+      "tags": [
+        "trait-definition",
+        "protocol",
+        "service",
+        "api-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:shared/src/config.rs",
+      "type": "file",
+      "name": "config.rs",
+      "filePath": "shared/src/config.rs",
+      "summary": "Provides the `Config` struct and a `from_env` constructor that reads all required service credentials (database URL, Redis URL, Alchemy, Helius, Sentry DSN, port) from environment variables, returning a `SeraphError::Config` on missing keys.",
+      "tags": [
+        "configuration",
+        "environment",
+        "service",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:shared/src/error.rs",
+      "type": "file",
+      "name": "error.rs",
+      "filePath": "shared/src/error.rs",
+      "summary": "Defines the `SeraphError` enum with variants for database, migration, parse, config, not-found, and protocol errors, serving as the unified error type for the entire shared crate.",
+      "tags": [
+        "error-handling",
+        "type-definition",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:shared/src/lib.rs",
+      "type": "file",
+      "name": "lib.rs",
+      "filePath": "shared/src/lib.rs",
+      "summary": "Crate root for the `shared` library; re-exports all public modules \u2014 adapter trait, config, database layer, error types, and core types \u2014 as the single entry point for downstream crates.",
+      "tags": [
+        "entry-point",
+        "barrel",
+        "crate-root"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:shared/src/types.rs",
+      "type": "file",
+      "name": "types.rs",
+      "filePath": "shared/src/types.rs",
+      "summary": "Core domain types for the cross-chain indexer: `ChainId` newtype, `ChainRuntime` enum (EVM/Solana/Cosmos), `TxStatus` enum, `CrossChainEvent` and `StitchedTransaction` data structs, `RawLog` for raw blockchain log input, and a `chains` module of named chain-ID constants.",
+      "tags": [
+        "type-definition",
+        "data-model",
+        "domain-types",
+        "serialization"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Uses newtype pattern for ChainId and derives serde Serialize/Deserialize on all public structs; TryFrom impls provide safe string-to-enum conversion for database round-trips."
+    },
+    {
+      "id": "class:shared/src/adapter.rs:ProtocolAdapter",
+      "type": "class",
+      "name": "ProtocolAdapter",
+      "filePath": "shared/src/adapter.rs",
+      "lineRange": [
+        10,
+        30
+      ],
+      "summary": "Async trait that every bridge protocol adapter must implement; exposes `protocol_id`, `chain_runtime`, `parse_event`, `correlation_id`, `status`, and `supported_chains` for enum-dispatched hot-path event processing.",
+      "tags": [
+        "trait-definition",
+        "protocol",
+        "abstraction",
+        "service"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:shared/src/config.rs:Config",
+      "type": "class",
+      "name": "Config",
+      "filePath": "shared/src/config.rs",
+      "lineRange": [
+        8,
+        34
+      ],
+      "summary": "Application configuration struct holding database URL, Redis URL, Alchemy and Helius API keys, webhook secret, optional Sentry DSN, and server port; constructed via `from_env`.",
+      "tags": [
+        "configuration",
+        "data-model",
+        "environment"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:shared/src/config.rs:from_env",
+      "type": "function",
+      "name": "from_env",
+      "filePath": "shared/src/config.rs",
+      "lineRange": [
+        21,
+        34
+      ],
+      "summary": "Reads all required configuration values from environment variables using `require_env` for mandatory keys and falls back to defaults for optional ones (Sentry DSN, port 3000).",
+      "tags": [
+        "configuration",
+        "factory",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:shared/src/error.rs:SeraphError",
+      "type": "class",
+      "name": "SeraphError",
+      "filePath": "shared/src/error.rs",
+      "lineRange": [
+        4,
+        22
+      ],
+      "summary": "Unified error enum for the shared crate with variants: `Database(sqlx::Error)`, `Migration`, `Parse(String)`, `Config(String)`, `NotFound(String)`, and `Protocol(String)`.",
+      "tags": [
+        "error-handling",
+        "type-definition",
+        "domain"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:shared/src/types.rs:ChainId",
+      "type": "class",
+      "name": "ChainId",
+      "filePath": "shared/src/types.rs",
+      "lineRange": [
+        7,
+        30
+      ],
+      "summary": "Newtype wrapper around a String representing a blockchain chain identifier, with `new` constructor and `From<u64>` / `From<&str>` conversions for numeric EVM chain IDs and string-based Cosmos/Solana identifiers.",
+      "tags": [
+        "type-definition",
+        "domain-types",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:shared/src/types.rs:ChainRuntime",
+      "type": "class",
+      "name": "ChainRuntime",
+      "filePath": "shared/src/types.rs",
+      "lineRange": [
+        36,
+        61
+      ],
+      "summary": "Enum discriminating the three supported chain execution environments \u2014 `Evm`, `Solana`, and `Cosmos` \u2014 with `Display` and `TryFrom<&str>` implementations for serialization.",
+      "tags": [
+        "type-definition",
+        "domain-types",
+        "enum"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:shared/src/types.rs:TxStatus",
+      "type": "class",
+      "name": "TxStatus",
+      "filePath": "shared/src/types.rs",
+      "lineRange": [
+        67,
+        99
+      ],
+      "summary": "Enum tracking the lifecycle state of a cross-chain transaction with variants `Pending`, `Inflight`, `Completed`, and `Failed`; supports `Display` and `TryFrom<&str>` for database storage.",
+      "tags": [
+        "type-definition",
+        "domain-types",
+        "enum"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:shared/src/types.rs:CrossChainEvent",
+      "type": "class",
+      "name": "CrossChainEvent",
+      "filePath": "shared/src/types.rs",
+      "lineRange": [
+        104,
+        126
+      ],
+      "summary": "Primary indexed event struct capturing a single leg of a cross-chain transfer: source/destination chains, sender/receiver addresses, amount, token address, protocol ID, correlation ID for stitching, status, JSONB metadata, and audit timestamps.",
+      "tags": [
+        "data-model",
+        "domain-types",
+        "serialization"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:shared/src/types.rs:StitchedTransaction",
+      "type": "class",
+      "name": "StitchedTransaction",
+      "filePath": "shared/src/types.rs",
+      "lineRange": [
+        130,
+        145
+      ],
+      "summary": "Represents a fully correlated cross-chain journey produced by the stitcher, linking source and destination event IDs with the correlation ID, transfer details, protocol, and aggregate status.",
+      "tags": [
+        "data-model",
+        "domain-types",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:shared/src/types.rs:RawLog",
+      "type": "class",
+      "name": "RawLog",
+      "filePath": "shared/src/types.rs",
+      "lineRange": [
+        153,
+        165
+      ],
+      "summary": "Raw blockchain log record fed into protocol adapters for parsing, carrying contract address, topics, ABI-encoded data, block number, transaction hash, log index, and chain ID.",
+      "tags": [
+        "data-model",
+        "domain-types",
+        "indexer"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "pipeline:.github/workflows/ci.yml",
+      "type": "pipeline",
+      "name": "ci.yml",
+      "filePath": ".github/workflows/ci.yml",
+      "summary": "GitHub Actions CI workflow triggered on push and pull requests to main, running five parallel jobs across the Rust workspace: formatting check (rustfmt), Clippy linting with -D warnings, unit tests, release build, and cargo-audit security scanning.",
+      "tags": [
+        "ci-cd",
+        "testing",
+        "build-system",
+        "security",
+        "linting"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Sets SQLX_OFFLINE=true so sqlx compile-time query verification succeeds without a live database in CI. Ignores RUSTSEC-2023-0071 (Marvin Attack in the `rsa` crate) because no upstream fix is available in the alloy-rs dependency chain."
+    },
+    {
+      "id": "table:shared/migrations/0001_create_protocol_adapters.sql",
+      "type": "table",
+      "name": "0001_create_protocol_adapters.sql",
+      "filePath": "shared/migrations/0001_create_protocol_adapters.sql",
+      "summary": "Migration that creates the protocol_adapters registry table and seeds all 8 MVP bridge protocols (LayerZero V2, Wormhole, Axelar, Across, Stargate, CCTP, Hop, Connext) with their chain runtime types and supported chain arrays.",
+      "tags": [
+        "database",
+        "migration",
+        "seed-data",
+        "protocol-registry"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Uses ON CONFLICT (id) DO NOTHING for idempotent seeding and a TEXT[] array for supported_chains. The chain_runtime CHECK constraint ('evm'/'solana'/'cosmos') mirrors the ChainRuntime enum in the Rust shared crate."
+    },
+    {
+      "id": "table:shared/migrations/0001_create_protocol_adapters.sql:protocol_adapters",
+      "type": "table",
+      "name": "protocol_adapters",
+      "filePath": "shared/migrations/0001_create_protocol_adapters.sql",
+      "lineRange": [
+        1,
+        8
+      ],
+      "summary": "Registry table storing supported bridge protocol adapters with TEXT primary key, chain runtime type, supported chain list (TEXT[]), and an enabled flag for toggling adapters at runtime.",
+      "tags": [
+        "database",
+        "schema-definition",
+        "protocol-registry"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:shared/migrations/0002_create_cross_chain_events.sql",
+      "type": "table",
+      "name": "0002_create_cross_chain_events.sql",
+      "filePath": "shared/migrations/0002_create_cross_chain_events.sql",
+      "summary": "Migration that creates the central cross_chain_events unified events table with JSONB metadata, status lifecycle tracking, a unique constraint on (source_tx_hash, source_chain), and 6 performance indexes including a partial index on live events.",
+      "tags": [
+        "database",
+        "migration",
+        "indexing",
+        "time-series"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "The amount column is stored as TEXT to preserve u256 precision without floating-point loss. A commented-out TimescaleDB hypertable call enables time-series partitioning on created_at once the Supabase extension is confirmed active. The partial index on live statuses (pending/inflight) avoids scanning the majority of completed rows."
+    },
+    {
+      "id": "table:shared/migrations/0002_create_cross_chain_events.sql:cross_chain_events",
+      "type": "table",
+      "name": "cross_chain_events",
+      "filePath": "shared/migrations/0002_create_cross_chain_events.sql",
+      "lineRange": [
+        1,
+        20
+      ],
+      "summary": "Central events table capturing all raw cross-chain transactions indexed by source hash and correlation ID, with status lifecycle (pending/inflight/completed/failed) and extensible JSONB metadata for protocol-specific fields.",
+      "tags": [
+        "database",
+        "schema-definition",
+        "events",
+        "time-series"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "table:shared/migrations/0003_create_stitched_transactions.sql",
+      "type": "table",
+      "name": "0003_create_stitched_transactions.sql",
+      "filePath": "shared/migrations/0003_create_stitched_transactions.sql",
+      "summary": "Migration that creates the stitched_transactions table linking correlated source and destination cross-chain events into unified journey records, with nullable FK references to cross_chain_events for both legs of each transfer.",
+      "tags": [
+        "database",
+        "migration",
+        "correlation",
+        "indexing"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Both source_event_id and dest_event_id are nullable FKs to cross_chain_events with ON DELETE SET NULL, accommodating the stitcher's async pattern where the destination event may not exist when the row is first created."
+    },
+    {
+      "id": "table:shared/migrations/0003_create_stitched_transactions.sql:stitched_transactions",
+      "type": "table",
+      "name": "stitched_transactions",
+      "filePath": "shared/migrations/0003_create_stitched_transactions.sql",
+      "lineRange": [
+        1,
+        18
+      ],
+      "summary": "Correlated cross-chain journey table with a unique correlation_id, status lifecycle, and nullable FK references to both source and destination cross_chain_events rows representing each leg of the bridging operation.",
+      "tags": [
+        "database",
+        "schema-definition",
+        "stitching",
+        "correlation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:.env.example",
+      "type": "config",
+      "name": ".env.example",
+      "filePath": ".env.example",
+      "summary": "Environment variable template documenting the seven required runtime secrets for the workspace: Supabase PostgreSQL connection, Upstash Redis, Alchemy API key (EVM), Helius API key and webhook secret (Solana), Sentry DSN, and RUST_LOG level.",
+      "tags": [
+        "configuration",
+        "security",
+        "infrastructure",
+        "environment",
+        "deployment"
+      ],
+      "complexity": "simple",
+      "languageNotes": "Placeholder values use bracket-style tokens (e.g. [password], [ref]) to indicate required substitution without exposing real credentials."
+    },
+    {
+      "id": "config:Cargo.toml",
+      "type": "config",
+      "name": "Cargo.toml",
+      "filePath": "Cargo.toml",
+      "summary": "Rust workspace root declaring three member crates (indexer, api, shared) and centralizing all shared dependency versions including Tokio, Axum, sqlx, alloy-rs, serde, deadpool-redis, and tracing to enforce consistent versions across the workspace.",
+      "tags": [
+        "configuration",
+        "build-system",
+        "workspace",
+        "dependency-management"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Uses Cargo workspace resolver v2 and workspace.dependencies to allow each member crate to inherit versions without repetition; inline comments explain each dependency's architectural role."
+    },
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "README.md",
+      "summary": "Minimal project overview that identifies Seraph as a cross-chain transaction explorer with a Rust indexer targeting EVM chains, Solana, and Cosmos bridge protocols.",
+      "tags": [
+        "documentation",
+        "overview",
+        "entry-point"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:deny.toml",
+      "type": "config",
+      "name": "deny.toml",
+      "filePath": "deny.toml",
+      "summary": "cargo-deny configuration enforcing license compliance (MIT, Apache-2.0, BSD variants, ISC, Unicode, Zlib), security advisory scanning, an explicit ban on OpenSSL crates in favor of rustls, and restriction of package sources exclusively to crates.io.",
+      "tags": [
+        "configuration",
+        "security",
+        "dependency-management",
+        "compliance"
+      ],
+      "complexity": "simple",
+      "languageNotes": "The openssl ban in [bans] enforces the project-wide rustls-only TLS policy established in Cargo.toml, where sqlx and reqwest both use tls-rustls."
+    },
+    {
+      "id": "config:rust-toolchain.toml",
+      "type": "config",
+      "name": "rust-toolchain.toml",
+      "filePath": "rust-toolchain.toml",
+      "summary": "Pins the Rust toolchain to channel 1.96.0 with rustfmt and clippy components to guarantee deterministic builds and consistent linting across all developer machines and CI environments.",
+      "tags": [
+        "configuration",
+        "build-system",
+        "toolchain"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:.github/pull_request_template.md",
+      "type": "document",
+      "name": "pull_request_template.md",
+      "filePath": ".github/pull_request_template.md",
+      "summary": "GitHub pull request template enforcing a structured What/Why/How/Testing/Checklist format to ensure consistent PR quality and completeness across the seraph codebase.",
+      "tags": [
+        "documentation",
+        "development",
+        "contribution",
+        "workflow"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:api/Cargo.toml",
+      "type": "config",
+      "name": "Cargo.toml",
+      "filePath": "api/Cargo.toml",
+      "summary": "Cargo manifest for the `api` crate, wiring workspace dependencies for Axum, Tokio, sqlx, deadpool-redis, serde, tracing, and seraph-shared to build the Axum REST API service.",
+      "tags": [
+        "configuration",
+        "build-system",
+        "dependencies"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:api/src/main.rs",
+      "type": "file",
+      "name": "main.rs",
+      "filePath": "api/src/main.rs",
+      "summary": "Entry-point stub for the Axum REST API crate containing a placeholder `main` function that will be expanded with route mounting, middleware, and server startup logic.",
+      "tags": [
+        "entry-point",
+        "api-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:indexer/Cargo.toml",
+      "type": "config",
+      "name": "Cargo.toml",
+      "filePath": "indexer/Cargo.toml",
+      "summary": "Cargo manifest for the `indexer` crate, pulling in alloy (EVM), reqwest (Solana/Helius webhooks), Tokio, sqlx, serde, tracing, and the seraph-shared crate to build the multi-chain blockchain indexer.",
+      "tags": [
+        "configuration",
+        "build-system",
+        "dependencies"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:shared/Cargo.toml",
+      "type": "config",
+      "name": "Cargo.toml",
+      "filePath": "shared/Cargo.toml",
+      "summary": "Cargo manifest for the `seraph-shared` crate, declaring async-trait, chrono, serde, sqlx, thiserror, and uuid as the foundational dependencies for shared types and the database access layer.",
+      "tags": [
+        "configuration",
+        "build-system",
+        "dependencies"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:shared/src/db/mod.rs",
+      "type": "file",
+      "name": "mod.rs",
+      "filePath": "shared/src/db/mod.rs",
+      "summary": "Database access layer exposing 14 async public functions for inserting, querying, and updating cross-chain events, stitched transactions, and protocol adapter records in PostgreSQL via sqlx; also defines the `ProtocolStats` aggregate return struct.",
+      "tags": [
+        "service",
+        "database",
+        "data-model",
+        "utility"
+      ],
+      "complexity": "complex",
+      "languageNotes": "All query functions return `Result<_, SeraphError>` via `map_err`; queries use positional `$N` placeholders compatible with PostgreSQL and sqlx's compile-time checked API."
+    },
+    {
+      "id": "function:shared/src/db/mod.rs:connect",
+      "type": "function",
+      "name": "connect",
+      "filePath": "shared/src/db/mod.rs",
+      "lineRange": [
+        12,
+        18
+      ],
+      "summary": "Creates and returns a PostgreSQL connection pool (max 10 connections) from a database URL, mapping sqlx errors to SeraphError.",
+      "tags": [
+        "database",
+        "utility",
+        "service"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:shared/src/db/mod.rs:run_migrations",
+      "type": "function",
+      "name": "run_migrations",
+      "filePath": "shared/src/db/mod.rs",
+      "lineRange": [
+        21,
+        26
+      ],
+      "summary": "Runs all pending sqlx migrations against the provided connection pool using the embedded migrations macro.",
+      "tags": [
+        "database",
+        "migration",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:shared/src/db/mod.rs:insert_event",
+      "type": "function",
+      "name": "insert_event",
+      "filePath": "shared/src/db/mod.rs",
+      "lineRange": [
+        31,
+        58
+      ],
+      "summary": "Inserts a `CrossChainEventRow` into the `cross_chain_events` table with ON CONFLICT DO NOTHING on (source_tx_hash, source_chain) for idempotent ingestion.",
+      "tags": [
+        "database",
+        "data-model",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:shared/src/db/mod.rs:get_event_by_tx_hash",
+      "type": "function",
+      "name": "get_event_by_tx_hash",
+      "filePath": "shared/src/db/mod.rs",
+      "lineRange": [
+        60,
+        71
+      ],
+      "summary": "Fetches a single cross-chain event row by source transaction hash, returning None if not found.",
+      "tags": [
+        "database",
+        "data-model",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:shared/src/db/mod.rs:get_events_by_correlation_id",
+      "type": "function",
+      "name": "get_events_by_correlation_id",
+      "filePath": "shared/src/db/mod.rs",
+      "lineRange": [
+        73,
+        86
+      ],
+      "summary": "Returns all cross-chain event rows matching a correlation ID, ordered by creation time ascending for journey reconstruction.",
+      "tags": [
+        "database",
+        "data-model",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:shared/src/db/mod.rs:get_events_by_sender",
+      "type": "function",
+      "name": "get_events_by_sender",
+      "filePath": "shared/src/db/mod.rs",
+      "lineRange": [
+        88,
+        106
+      ],
+      "summary": "Returns paginated cross-chain events for a given sender address, ordered by creation time descending with LIMIT and OFFSET parameters.",
+      "tags": [
+        "database",
+        "data-model",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:shared/src/db/mod.rs:get_unstitched_events",
+      "type": "function",
+      "name": "get_unstitched_events",
+      "filePath": "shared/src/db/mod.rs",
+      "lineRange": [
+        109,
+        120
+      ],
+      "summary": "Returns cross-chain events that have no corresponding stitched transaction via a LEFT JOIN, used by the background correlation engine to find pending work.",
+      "tags": [
+        "database",
+        "data-model",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:shared/src/db/mod.rs:update_event_status",
+      "type": "function",
+      "name": "update_event_status",
+      "filePath": "shared/src/db/mod.rs",
+      "lineRange": [
+        122,
+        134
+      ],
+      "summary": "Updates the status field and `updated_at` timestamp of a cross-chain event identified by its UUID.",
+      "tags": [
+        "database",
+        "data-model",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:shared/src/db/mod.rs:upsert_stitched_tx",
+      "type": "function",
+      "name": "upsert_stitched_tx",
+      "filePath": "shared/src/db/mod.rs",
+      "lineRange": [
+        141,
+        173
+      ],
+      "summary": "Inserts or updates a stitched transaction record keyed by correlation_id, updating status, dest chain, destination event ID, receiver address, and timestamp on conflict.",
+      "tags": [
+        "database",
+        "data-model",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:shared/src/db/mod.rs:get_stitched_tx_by_correlation_id",
+      "type": "function",
+      "name": "get_stitched_tx_by_correlation_id",
+      "filePath": "shared/src/db/mod.rs",
+      "lineRange": [
+        175,
+        186
+      ],
+      "summary": "Fetches a single stitched transaction row by correlation ID, returning None if the cross-chain journey has not yet been correlated.",
+      "tags": [
+        "database",
+        "data-model",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:shared/src/db/mod.rs:get_stitched_txs_by_sender",
+      "type": "function",
+      "name": "get_stitched_txs_by_sender",
+      "filePath": "shared/src/db/mod.rs",
+      "lineRange": [
+        188,
+        206
+      ],
+      "summary": "Returns paginated stitched transaction rows for a given sender address, ordered by creation time descending; used by the wallet query API route.",
+      "tags": [
+        "database",
+        "data-model",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:shared/src/db/mod.rs:get_protocol_adapter",
+      "type": "function",
+      "name": "get_protocol_adapter",
+      "filePath": "shared/src/db/mod.rs",
+      "lineRange": [
+        210,
+        216
+      ],
+      "summary": "Looks up a single protocol adapter configuration record by its string identifier (e.g., 'layerzero-v2').",
+      "tags": [
+        "database",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:shared/src/db/mod.rs:list_enabled_adapters",
+      "type": "function",
+      "name": "list_enabled_adapters",
+      "filePath": "shared/src/db/mod.rs",
+      "lineRange": [
+        218,
+        225
+      ],
+      "summary": "Returns all protocol adapter rows with the enabled flag set to true, ordered by ID; used at indexer startup to determine which adapters to activate.",
+      "tags": [
+        "database",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:shared/src/db/mod.rs:get_protocol_stats",
+      "type": "function",
+      "name": "get_protocol_stats",
+      "filePath": "shared/src/db/mod.rs",
+      "lineRange": [
+        227,
+        249
+      ],
+      "summary": "Aggregates stitched transaction counts by status (completed, pending, inflight, failed) for a given protocol ID and returns a `ProtocolStats` struct for the API stats endpoint.",
+      "tags": [
+        "database",
+        "utility",
+        "api-handler"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:shared/src/db/mod.rs:ProtocolStats",
+      "type": "class",
+      "name": "ProtocolStats",
+      "filePath": "shared/src/db/mod.rs",
+      "lineRange": [
+        252,
+        258
+      ],
+      "summary": "Aggregate return type carrying per-status counts (completed, pending, inflight, failed) for a protocol, produced by `get_protocol_stats` and serialized for the API response.",
+      "tags": [
+        "data-model",
+        "type-definition",
+        "api-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:shared/src/db/models.rs",
+      "type": "file",
+      "name": "models.rs",
+      "filePath": "shared/src/db/models.rs",
+      "summary": "Defines the three sqlx-mapped database row structs (`CrossChainEventRow`, `StitchedTransactionRow`, `ProtocolAdapterRow`) and their bidirectional conversions to and from the shared domain types via `TryFrom` and `From` trait implementations.",
+      "tags": [
+        "data-model",
+        "serialization",
+        "database",
+        "type-definition"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:shared/src/db/models.rs:CrossChainEventRow",
+      "type": "class",
+      "name": "CrossChainEventRow",
+      "filePath": "shared/src/db/models.rs",
+      "lineRange": [
+        13,
+        28
+      ],
+      "summary": "sqlx `FromRow`-derived struct mapping the `cross_chain_events` PostgreSQL table columns; implements `TryFrom<CrossChainEventRow>` for the domain `CrossChainEvent` type and vice versa.",
+      "tags": [
+        "data-model",
+        "database",
+        "serialization"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:shared/src/db/models.rs:StitchedTransactionRow",
+      "type": "class",
+      "name": "StitchedTransactionRow",
+      "filePath": "shared/src/db/models.rs",
+      "lineRange": [
+        76,
+        91
+      ],
+      "summary": "sqlx `FromRow`-derived struct mapping the `stitched_transactions` PostgreSQL table columns; implements bidirectional conversions with the domain `StitchedTransaction` type.",
+      "tags": [
+        "data-model",
+        "database",
+        "serialization"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "class:shared/src/db/models.rs:ProtocolAdapterRow",
+      "type": "class",
+      "name": "ProtocolAdapterRow",
+      "filePath": "shared/src/db/models.rs",
+      "lineRange": [
+        139,
+        146
+      ],
+      "summary": "sqlx `FromRow`-derived struct mapping the `protocol_adapters` registry table, carrying the adapter's ID, name, chain runtime, supported chains, enabled flag, and creation timestamp.",
+      "tags": [
+        "data-model",
+        "database",
+        "type-definition"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:indexer/src/main.rs",
+      "target": "file:indexer/src/adapters/mod.rs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:indexer/src/main.rs",
+      "target": "file:indexer/src/log.rs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:indexer/src/main.rs",
+      "target": "file:indexer/src/provider.rs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:indexer/src/main.rs",
+      "target": "file:indexer/src/runner.rs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:indexer/src/runner.rs",
+      "target": "file:indexer/src/adapters/mod.rs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:indexer/src/adapters/mod.rs",
+      "target": "class:indexer/src/adapters/mod.rs:AdapterDispatch",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:indexer/src/adapters/mod.rs",
+      "target": "function:indexer/src/adapters/mod.rs:parse_event",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:indexer/src/adapters/mod.rs",
+      "target": "function:indexer/src/adapters/mod.rs:correlation_id",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:indexer/src/log.rs",
+      "target": "function:indexer/src/log.rs:to_raw",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:indexer/src/main.rs",
+      "target": "function:indexer/src/main.rs:main",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:indexer/src/provider.rs",
+      "target": "function:indexer/src/provider.rs:connect",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:indexer/src/runner.rs",
+      "target": "class:indexer/src/runner.rs:ChainRunner",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:indexer/src/runner.rs",
+      "target": "function:indexer/src/runner.rs:run",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:indexer/src/runner.rs",
+      "target": "function:indexer/src/runner.rs:backfill",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:indexer/src/runner.rs",
+      "target": "function:indexer/src/runner.rs:fetch_chunk",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:indexer/src/runner.rs",
+      "target": "function:indexer/src/runner.rs:subscribe",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:indexer/src/runner.rs",
+      "target": "function:indexer/src/runner.rs:build_filter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:indexer/src/runner.rs",
+      "target": "function:indexer/src/runner.rs:process",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:indexer/src/adapters/mod.rs",
+      "target": "class:indexer/src/adapters/mod.rs:AdapterDispatch",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:indexer/src/adapters/mod.rs",
+      "target": "function:indexer/src/adapters/mod.rs:parse_event",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:indexer/src/adapters/mod.rs",
+      "target": "function:indexer/src/adapters/mod.rs:correlation_id",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:indexer/src/log.rs",
+      "target": "function:indexer/src/log.rs:to_raw",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:indexer/src/provider.rs",
+      "target": "function:indexer/src/provider.rs:connect",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:indexer/src/runner.rs",
+      "target": "class:indexer/src/runner.rs:ChainRunner",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:indexer/src/runner.rs",
+      "target": "function:indexer/src/runner.rs:run",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:indexer/src/main.rs:main",
+      "target": "function:indexer/src/provider.rs:connect",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:indexer/src/main.rs:main",
+      "target": "function:indexer/src/runner.rs:run",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:indexer/src/runner.rs:process",
+      "target": "function:indexer/src/log.rs:to_raw",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:indexer/src/runner.rs:process",
+      "target": "function:indexer/src/adapters/mod.rs:parse_event",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/adapter.rs",
+      "target": "file:shared/src/types.rs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:shared/src/config.rs",
+      "target": "file:shared/src/error.rs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:shared/src/lib.rs",
+      "target": "file:shared/src/adapter.rs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:shared/src/lib.rs",
+      "target": "file:shared/src/config.rs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:shared/src/lib.rs",
+      "target": "file:shared/src/db/mod.rs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:shared/src/lib.rs",
+      "target": "file:shared/src/error.rs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:shared/src/lib.rs",
+      "target": "file:shared/src/types.rs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:shared/src/adapter.rs",
+      "target": "class:shared/src/adapter.rs:ProtocolAdapter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/config.rs",
+      "target": "class:shared/src/config.rs:Config",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/config.rs",
+      "target": "function:shared/src/config.rs:from_env",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/error.rs",
+      "target": "class:shared/src/error.rs:SeraphError",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/types.rs",
+      "target": "class:shared/src/types.rs:ChainId",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/types.rs",
+      "target": "class:shared/src/types.rs:ChainRuntime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/types.rs",
+      "target": "class:shared/src/types.rs:TxStatus",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/types.rs",
+      "target": "class:shared/src/types.rs:CrossChainEvent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/types.rs",
+      "target": "class:shared/src/types.rs:StitchedTransaction",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/types.rs",
+      "target": "class:shared/src/types.rs:RawLog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/adapter.rs",
+      "target": "class:shared/src/adapter.rs:ProtocolAdapter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/config.rs",
+      "target": "class:shared/src/config.rs:Config",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/config.rs",
+      "target": "function:shared/src/config.rs:from_env",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/error.rs",
+      "target": "class:shared/src/error.rs:SeraphError",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/types.rs",
+      "target": "class:shared/src/types.rs:ChainId",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/types.rs",
+      "target": "class:shared/src/types.rs:ChainRuntime",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/types.rs",
+      "target": "class:shared/src/types.rs:TxStatus",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/types.rs",
+      "target": "class:shared/src/types.rs:CrossChainEvent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/types.rs",
+      "target": "class:shared/src/types.rs:StitchedTransaction",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/types.rs",
+      "target": "class:shared/src/types.rs:RawLog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "table:shared/migrations/0001_create_protocol_adapters.sql",
+      "target": "table:shared/migrations/0001_create_protocol_adapters.sql:protocol_adapters",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "table:shared/migrations/0001_create_protocol_adapters.sql",
+      "target": "table:shared/migrations/0001_create_protocol_adapters.sql:protocol_adapters",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:shared/migrations/0002_create_cross_chain_events.sql",
+      "target": "table:shared/migrations/0002_create_cross_chain_events.sql:cross_chain_events",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "table:shared/migrations/0002_create_cross_chain_events.sql",
+      "target": "table:shared/migrations/0002_create_cross_chain_events.sql:cross_chain_events",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:shared/migrations/0003_create_stitched_transactions.sql",
+      "target": "table:shared/migrations/0003_create_stitched_transactions.sql:stitched_transactions",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "table:shared/migrations/0003_create_stitched_transactions.sql",
+      "target": "table:shared/migrations/0003_create_stitched_transactions.sql:stitched_transactions",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:shared/migrations/0003_create_stitched_transactions.sql:stitched_transactions",
+      "target": "table:shared/migrations/0002_create_cross_chain_events.sql:cross_chain_events",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "table:shared/migrations/0003_create_stitched_transactions.sql",
+      "target": "table:shared/migrations/0002_create_cross_chain_events.sql",
+      "type": "depends_on",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "table:shared/migrations/0002_create_cross_chain_events.sql:cross_chain_events",
+      "target": "table:shared/migrations/0001_create_protocol_adapters.sql:protocol_adapters",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "table:shared/migrations/0003_create_stitched_transactions.sql:stitched_transactions",
+      "target": "table:shared/migrations/0001_create_protocol_adapters.sql:protocol_adapters",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:rust-toolchain.toml",
+      "target": "config:Cargo.toml",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:deny.toml",
+      "target": "config:Cargo.toml",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "document:README.md",
+      "target": "config:Cargo.toml",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:api/Cargo.toml",
+      "target": "file:api/src/main.rs",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:shared/Cargo.toml",
+      "target": "file:shared/src/db/mod.rs",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:shared/Cargo.toml",
+      "target": "file:shared/src/db/models.rs",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "file:shared/src/db/models.rs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "file:shared/src/error.rs",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:connect",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:connect",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:run_migrations",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:run_migrations",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:insert_event",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:insert_event",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:get_event_by_tx_hash",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:get_event_by_tx_hash",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:get_events_by_correlation_id",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:get_events_by_correlation_id",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:get_events_by_sender",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:get_events_by_sender",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:get_unstitched_events",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:get_unstitched_events",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:update_event_status",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:update_event_status",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:upsert_stitched_tx",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:upsert_stitched_tx",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:get_stitched_tx_by_correlation_id",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:get_stitched_tx_by_correlation_id",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:get_stitched_txs_by_sender",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:get_stitched_txs_by_sender",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:get_protocol_adapter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:get_protocol_adapter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:list_enabled_adapters",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:list_enabled_adapters",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:get_protocol_stats",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "function:shared/src/db/mod.rs:get_protocol_stats",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "class:shared/src/db/mod.rs:ProtocolStats",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/mod.rs",
+      "target": "class:shared/src/db/mod.rs:ProtocolStats",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/db/models.rs",
+      "target": "class:shared/src/db/models.rs:CrossChainEventRow",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/models.rs",
+      "target": "class:shared/src/db/models.rs:CrossChainEventRow",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/db/models.rs",
+      "target": "class:shared/src/db/models.rs:StitchedTransactionRow",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/models.rs",
+      "target": "class:shared/src/db/models.rs:StitchedTransactionRow",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:shared/src/db/models.rs",
+      "target": "class:shared/src/db/models.rs:ProtocolAdapterRow",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:shared/src/db/models.rs",
+      "target": "class:shared/src/db/models.rs:ProtocolAdapterRow",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ],
+  "layers": [
+    {
+      "id": "layer:api",
+      "name": "REST API Service",
+      "description": "Axum HTTP server entry point and crate manifest for the versioned /v1/ explorer API serving transaction and protocol data to clients",
+      "nodeIds": [
+        "file:api/src/main.rs",
+        "config:api/Cargo.toml"
+      ]
+    },
+    {
+      "id": "layer:indexer",
+      "name": "Blockchain Indexer",
+      "description": "Multi-chain event ingestion runtime: Tokio orchestration, per-chain ChainRunner (backfill + live subscribe_logs), AdapterDispatch enum for zero-cost protocol routing, alloy-rs WebSocket provider, and log format conversion",
+      "nodeIds": [
+        "file:indexer/src/main.rs",
+        "file:indexer/src/runner.rs",
+        "file:indexer/src/adapters/mod.rs",
+        "file:indexer/src/log.rs",
+        "file:indexer/src/provider.rs",
+        "config:indexer/Cargo.toml"
+      ]
+    },
+    {
+      "id": "layer:shared",
+      "name": "Shared Core Library",
+      "description": "Cross-crate foundation: ProtocolAdapter async trait, core domain types (ChainId, CrossChainEvent, TxStatus, RawLog), SeraphError enum, and environment-driven Config struct consumed by both the indexer and API",
+      "nodeIds": [
+        "file:shared/src/lib.rs",
+        "file:shared/src/adapter.rs",
+        "file:shared/src/types.rs",
+        "file:shared/src/error.rs",
+        "file:shared/src/config.rs",
+        "config:shared/Cargo.toml"
+      ]
+    },
+    {
+      "id": "layer:data",
+      "name": "Data Layer",
+      "description": "PostgreSQL persistence layer: sqlx async query functions for all three tables, row-level structs with TryFrom conversions, and the three SQL migrations that define the cross_chain_events, stitched_transactions, and protocol_adapters schemas with TimescaleDB and FK constraints",
+      "nodeIds": [
+        "file:shared/src/db/mod.rs",
+        "file:shared/src/db/models.rs",
+        "table:shared/migrations/0001_create_protocol_adapters.sql",
+        "table:shared/migrations/0002_create_cross_chain_events.sql",
+        "table:shared/migrations/0003_create_stitched_transactions.sql",
+        "table:shared/migrations/0001_create_protocol_adapters.sql:protocol_adapters",
+        "table:shared/migrations/0002_create_cross_chain_events.sql:cross_chain_events",
+        "table:shared/migrations/0003_create_stitched_transactions.sql:stitched_transactions"
+      ]
+    },
+    {
+      "id": "layer:config",
+      "name": "Build Configuration",
+      "description": "Workspace-level build and runtime configuration: Cargo workspace manifest pinning shared dependency versions, Rust 1.96.0 toolchain pin, cargo-deny license/rustls policy, and the .env.example secrets template for DATABASE_URL, Redis, and RPC API keys",
+      "nodeIds": [
+        "config:Cargo.toml",
+        "config:rust-toolchain.toml",
+        "config:deny.toml",
+        "config:.env.example"
+      ]
+    },
+    {
+      "id": "layer:ci-cd",
+      "name": "CI/CD & Documentation",
+      "description": "GitHub Actions CI pipeline (fmt, clippy, test, build, audit on push/PR to main), PR contribution template, and the top-level project README describing Seraph as a cross-chain transaction explorer",
+      "nodeIds": [
+        "pipeline:.github/workflows/ci.yml",
+        "document:.github/pull_request_template.md",
+        "document:README.md"
+      ]
+    }
+  ],
+  "tour": [
+    {
+      "order": 1,
+      "title": "Project Overview",
+      "description": "README.md introduces Seraph: a cross-chain transaction explorer that tracks bridge events across EVM chains, Solana, and Cosmos in a single unified view. Reading it first establishes why the project exists \u2014 correlating fragmented bridge transactions into coherent cross-chain journeys \u2014 which gives every subsequent architectural decision a clear motivating context.",
+      "nodeIds": [
+        "document:README.md"
+      ]
+    },
+    {
+      "order": 2,
+      "title": "Workspace & Toolchain",
+      "description": "The root Cargo.toml defines a Cargo workspace containing three crates \u2014 indexer, api, and shared \u2014 and pins all shared dependency versions centrally so each crate uses identical library versions without declaring them individually. rust-toolchain.toml locks the entire workspace to Rust 1.96.0 with rustfmt and clippy enabled, ensuring every contributor and the CI pipeline build with the exact same compiler.",
+      "nodeIds": [
+        "config:Cargo.toml",
+        "config:rust-toolchain.toml"
+      ],
+      "languageLesson": "Rust workspaces declare member crates in [workspace] and use [workspace.dependencies] to centralize version pinning. Individual crates then inherit versions with dependency = { workspace = true } rather than repeating the version string, eliminating version drift across crates."
+    },
+    {
+      "order": 3,
+      "title": "Shared Crate & Domain Types",
+      "description": "shared/src/lib.rs is the crate root that re-exports all public modules under a single namespace; it is the most-imported file in the entire project with six direct consumers. The types it surfaces \u2014 defined in types.rs \u2014 establish the project's core vocabulary: ChainId and ChainRuntime enumerate supported blockchains, CrossChainEvent is the canonical in-flight event record, RawLog carries the unprocessed on-chain data, and StitchedTransaction represents the completed cross-chain journey after correlation.",
+      "nodeIds": [
+        "file:shared/src/lib.rs",
+        "file:shared/src/types.rs"
+      ],
+      "languageLesson": "Rust enums with derive macros (Debug, Clone, Serialize, Deserialize) are a zero-cost abstraction over tagged union types. Using enums for ChainId instead of string literals gives exhaustive pattern-matching so the compiler rejects any code that forgets to handle a new chain variant."
+    },
+    {
+      "order": 4,
+      "title": "ProtocolAdapter Trait",
+      "description": "adapter.rs defines the ProtocolAdapter async trait \u2014 the single abstraction every bridge protocol implementation must satisfy. It mandates methods for protocol identity, chain runtime selection, raw-log parsing, correlation ID extraction, status determination, and supported chain enumeration. Because this trait is the extension point for all 8 MVP protocols (LayerZero V2, Wormhole, Axelar, and five others), understanding it is essential before reading any indexer code that calls into it.",
+      "nodeIds": [
+        "file:shared/src/adapter.rs"
+      ],
+      "languageLesson": "The async_trait crate works around a Rust limitation: async fn is not yet stable inside trait definitions. It rewrites async fn parse_event(...) into fn parse_event(...) -> Pin<Box<dyn Future<...>>> at compile time. Dispatch happens through an AdapterDispatch enum (not dyn ProtocolAdapter) on the hot path, preserving zero-cost dispatch without heap allocation per call."
+    },
+    {
+      "order": 5,
+      "title": "Error Handling & Runtime Config",
+      "description": "error.rs defines SeraphError as a thiserror-derived enum covering every failure mode: database errors, migration failures, parse errors, missing config, not-found events, and protocol errors. config.rs defines the Config struct that reads DATABASE_URL, REDIS_URL, ALCHEMY_API_KEY, and HELIUS_API_KEY from environment variables at startup, failing fast with a SeraphError::Config variant if any required value is absent. Together these two files establish how the system surfaces problems without panicking.",
+      "nodeIds": [
+        "file:shared/src/error.rs",
+        "file:shared/src/config.rs"
+      ],
+      "languageLesson": "thiserror generates Display and Error implementations from enum variants using #[error(\"...\")] attributes, making error messages human-readable without boilerplate. The ? operator propagates these errors up the call stack, converting between error types via From<> implementations that thiserror also generates."
+    },
+    {
+      "order": 6,
+      "title": "Protocol Registry Schema",
+      "description": "Migration 0001 creates the protocol_adapters table and immediately seeds it with all 8 supported bridge protocols at migration time \u2014 meaning the protocol registry is populated the instant the database is provisioned, not at application startup. This design ensures the indexer can query which protocols are active from day one without a separate seeding step.",
+      "nodeIds": [
+        "table:shared/migrations/0001_create_protocol_adapters.sql",
+        "table:shared/migrations/0001_create_protocol_adapters.sql:protocol_adapters"
+      ],
+      "languageLesson": "SQL migrations should be idempotent and executed in strict numeric order. Seeding reference data inside the initial migration (rather than a separate seed script) guarantees the data exists before any application code runs sqlx queries against it, which matters especially for compile-time query verification with sqlx::query!."
+    },
+    {
+      "order": 7,
+      "title": "Core Event Tables",
+      "description": "Migrations 0002 and 0003 define the two tables at the heart of the data pipeline. cross_chain_events stores every bridge event captured by the indexer with a JSONB metadata column for protocol-specific fields and six indexes covering the most common query patterns. stitched_transactions holds the correlated cross-chain journeys produced by the stitcher job, referencing cross_chain_events via foreign keys to maintain relational integrity while keeping the query model simple.",
+      "nodeIds": [
+        "table:shared/migrations/0002_create_cross_chain_events.sql",
+        "table:shared/migrations/0003_create_stitched_transactions.sql",
+        "table:shared/migrations/0002_create_cross_chain_events.sql:cross_chain_events",
+        "table:shared/migrations/0003_create_stitched_transactions.sql:stitched_transactions"
+      ],
+      "languageLesson": "TimescaleDB hypertables partition time-series data automatically by time range, enabling sub-second queries over months of event history that would otherwise require full table scans. The JSONB metadata column trades some query performance for schema flexibility \u2014 protocol-specific fields can be stored without adding columns, allowing new bridge protocols to be supported without schema migrations."
+    },
+    {
+      "order": 8,
+      "title": "Database Access Layer",
+      "description": "db/models.rs defines the sqlx row structs (CrossChainEventRow, StitchedTransactionRow, ProtocolAdapterRow) that map directly to the three tables from the previous steps, making the Rust type system aware of every column's type at compile time. db/mod.rs implements 14 async functions providing the full CRUD surface for all three tables \u2014 insert event, fetch by hash, list by wallet, upsert stitched transaction, and so on \u2014 using sqlx::query! macros that verify SQL correctness at compile time against the live database schema.",
+      "nodeIds": [
+        "file:shared/src/db/models.rs",
+        "file:shared/src/db/mod.rs"
+      ],
+      "languageLesson": "sqlx::query! (and query_as!) embed SQL strings in Rust source and check them against the database schema at compile time using the DATABASE_URL environment variable. This catches type mismatches, missing columns, and syntax errors before runtime. The SQLX_OFFLINE environment variable enables offline mode by reading a cached schema snapshot, so CI can verify queries without a live database."
+    },
+    {
+      "order": 9,
+      "title": "Indexer Entry Point",
+      "description": "indexer/src/main.rs is the Tokio async entry point for the blockchain indexer binary. It reads Config from environment, establishes a PostgreSQL connection pool via sqlx, runs pending migrations from shared/migrations/, then spawns one ChainRunner Tokio task per configured EVM chain and registers a Ctrl-C shutdown handler that gracefully awaits all tasks. .env.example documents the exact environment variables the Config struct expects, making it the developer's starting point when setting up a local instance.",
+      "nodeIds": [
+        "file:indexer/src/main.rs",
+        "config:.env.example"
+      ],
+      "languageLesson": "tokio::spawn returns a JoinHandle<T> which must be awaited to propagate panics back to the supervisor. Using tokio::select! with a SIGINT signal future allows the main task to cancel running chain tasks when Ctrl-C is pressed, producing clean shutdown instead of forcibly terminating mid-write database transactions."
+    },
+    {
+      "order": 10,
+      "title": "EVM Provider & Log Conversion",
+      "description": "provider.rs constructs an alloy-rs WebSocket provider connected to Alchemy's endpoint using the ALCHEMY_API_KEY from Config, establishing the persistent WebSocket connection that each ChainRunner will use for both historical backfill and live event subscriptions. log.rs performs the narrow but important job of converting alloy-rs Log structs into the shared RawLog type defined in types.rs, decoupling the indexer from alloy-rs types at the shared crate boundary.",
+      "nodeIds": [
+        "file:indexer/src/provider.rs",
+        "file:indexer/src/log.rs"
+      ],
+      "languageLesson": "alloy-rs is the modern successor to ethers-rs for Ethereum interaction in Rust. Its Provider abstraction supports WebSocket transport for persistent subscriptions (eth_subscribe) and HTTP for one-off calls. Converting immediately to RawLog at the boundary means the rest of the system never imports alloy-rs types directly, keeping the shared crate free of EVM-specific dependencies."
+    },
+    {
+      "order": 11,
+      "title": "Adapter Dispatch (Zero-Cost)",
+      "description": "indexer/src/adapters/mod.rs defines AdapterDispatch as a Rust enum whose variants each hold a concrete protocol adapter struct (e.g., LayerZeroV2Adapter, WormholeAdapter). Because enum dispatch compiles to a match statement, calling parse_event on an AdapterDispatch involves no heap allocation and no vtable lookup \u2014 the compiler generates a direct function call per variant. This is architecturally significant: each new bridge protocol adds an enum variant rather than a Box<dyn ProtocolAdapter>, preserving performance on the hot indexing path.",
+      "nodeIds": [
+        "file:indexer/src/adapters/mod.rs"
+      ],
+      "languageLesson": "Rust's trait objects (dyn Trait) require heap allocation and vtable dispatch for dynamic polymorphism. Enum dispatch sidesteps this by encoding all variants statically: the match is monomorphized per variant at compile time, producing inlined direct calls with no indirection. The trade-off is that adding a new variant requires recompiling all call sites, which is acceptable in a controlled workspace where all adapters live in one repo."
+    },
+    {
+      "order": 12,
+      "title": "Chain Runner \u2014 Indexing Loop",
+      "description": "runner.rs implements ChainRunner, the core event ingestion loop for a single EVM chain. It has two phases: a backfill phase that calls eth_getLogs over historical block ranges to catch events the indexer missed, followed by a live phase that uses subscribe_logs (a WebSocket push subscription) to receive new events in real time. Every log that arrives is converted to RawLog via log.rs, passed to AdapterDispatch to identify the protocol and parse the CrossChainEvent, and then inserted into cross_chain_events via the DB layer \u2014 completing the full ingestion pipeline.",
+      "nodeIds": [
+        "file:indexer/src/runner.rs"
+      ],
+      "languageLesson": "eth_getLogs scans historical blocks server-side and returns matching events in a single RPC call, making it efficient for catching up. subscribe_logs upgrades to a WebSocket subscription where the node pushes new matching logs without polling. Running both phases sequentially in one task avoids the race condition where live events arrive during backfill and are dropped."
+    },
+    {
+      "order": 13,
+      "title": "API Stub & CI Pipeline",
+      "description": "api/src/main.rs is a placeholder Axum entry point for the REST API service \u2014 it compiles cleanly but has no routes yet, representing the next phase of the build plan. The GitHub Actions workflow in ci.yml ensures this placeholder (and the entire workspace) always passes fmt, clippy, test, build, and cargo-audit checks before any code is merged, enforcing code quality standards from the first commit even while implementation is in progress.",
+      "nodeIds": [
+        "file:api/src/main.rs",
+        "pipeline:.github/workflows/ci.yml"
+      ],
+      "languageLesson": "GitHub Actions workflows use matrix builds with jobs that run in parallel. For a Rust workspace the jobs are typically cargo fmt --check (format), cargo clippy -- -D warnings (lint), cargo test (unit tests), cargo build --release (compile check), and cargo audit (security). Caching ~/.cargo/registry between runs with actions/cache reduces CI time from 3-5 minutes to under 1 minute on subsequent runs."
+    }
+  ]
+}
