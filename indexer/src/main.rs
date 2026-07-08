@@ -71,6 +71,21 @@ async fn main() -> anyhow::Result<()> {
             wss_url: format!("wss://base-mainnet.g.alchemy.com/v2/{key}"),
             start_block,
         },
+        ChainConfig {
+            chain_id: chain::polygon(),
+            wss_url: format!("wss://polygon-mainnet.g.alchemy.com/v2/{key}"),
+            start_block,
+        },
+        ChainConfig {
+            chain_id: chain::bsc(),
+            wss_url: format!("wss://bnb-mainnet.g.alchemy.com/v2/{key}"),
+            start_block,
+        },
+        ChainConfig {
+            chain_id: chain::avalanche(),
+            wss_url: format!("wss://avax-mainnet.g.alchemy.com/v2/{key}"),
+            start_block,
+        },
     ];
 
     let mut handles = Vec::new();
