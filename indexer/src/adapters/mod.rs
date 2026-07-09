@@ -72,6 +72,7 @@ impl AdapterDispatch {
 
     /// Derive the correlation key used by the stitcher to join source and
     /// destination events into a single journey.
+    #[allow(dead_code)]
     pub fn correlation_id(&self, event: &CrossChainEvent) -> String {
         match self {
             Self::LayerZeroV2(a) => a.correlation_id(event),

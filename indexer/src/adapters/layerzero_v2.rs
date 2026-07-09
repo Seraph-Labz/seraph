@@ -8,6 +8,7 @@ impl LayerZeroV2 {
         None
     }
 
+    #[allow(dead_code)]
     pub fn correlation_id(&self, event: &CrossChainEvent) -> String {
         event.correlation_id.clone()
     }

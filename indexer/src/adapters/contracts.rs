@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use alloy::primitives::Address;
 use seraph_shared::chain;
 
