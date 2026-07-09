@@ -47,20 +47,45 @@ pub fn across(chain_id: &str) -> Vec<Address> {
 }
 
 pub fn stargate(chain_id: &str) -> Vec<Address> {
-    // Stargate V2 StargatePoolUSDC — USDC pool as the primary signal.
-    // Each token has its own pool; additional pools can be added here per step 2.4.
+    // Stargate V2 — each token is its own pool contract, all emitting OFTSent.
+    // We watch every pool per chain so no token is missed.
     // Source: https://stargateprotocol.gitbook.io/stargate/v2-developer-docs/technical-reference/mainnet-contracts
-    let addr = match chain_id {
-        chain::ETHEREUM => "0xc026395860Db2d07ee33e05fE50ed7bD583189C7",
-        chain::ARBITRUM => "0xe8CDF27AcD73a434D661C84887215F7598e7d0d3",
-        chain::OPTIMISM => "0xcE8CcA271Ebc0533920C83d39F417ED6A0abB7D0",
-        chain::BASE => "0x27a16dc786820B16E5c9028b75B99F6f604b5d26",
-        chain::POLYGON => "0x9Aa02D4Fae7F58b8E8f34c66E756cC734DAc7fe4",
-        chain::BSC => "0x962Bd449E630b0d928f308Ce63f1A21F02576057",
-        chain::AVALANCHE => "0x5634c4a5FEd09819E3c46D86A965Dd9447d86e47",
+    let addrs: &[&str] = match chain_id {
+        chain::ETHEREUM => &[
+            "0x77b2043768d28E9C9aB44E1aBfC95944bcE57931", // ETH (Native)
+            "0xc026395860Db2d07ee33e05fE50ed7bD583189C7", // USDC
+            "0x933597a323Eb81cAe705C5bC29985172fd5A3973", // USDT
+            "0x268Ca24DAefF1FaC2ed883c598200CcbB79E931D", // mETH
+        ],
+        chain::ARBITRUM => &[
+            "0xA45B5130f36CDcA45667738e2a258AB09f4A5f7F", // ETH (Native)
+            "0xe8CDF27AcD73a434D661C84887215F7598e7d0d3", // USDC
+            "0xcE8CcA271Ebc0533920C83d39F417ED6A0abB7D0", // USDT
+        ],
+        chain::OPTIMISM => &[
+            "0xe8CDF27AcD73a434D661C84887215F7598e7d0d3", // ETH (Native)
+            "0xcE8CcA271Ebc0533920C83d39F417ED6A0abB7D0", // USDC
+            "0x19cFCE47eD54a88614648DC3f19A5980097007dD", // USDT
+        ],
+        chain::BASE => &[
+            "0xdc181Bd607330aeeBEF6ea62e03e5e1Fb4B6F7C7", // ETH (Native)
+            "0x27a16dc786820B16E5c9028b75B99F6f604b5d26", // USDC
+        ],
+        chain::POLYGON => &[
+            "0x9Aa02D4Fae7F58b8E8f34c66E756cC734DAc7fe4", // USDC
+            "0xd47b03ee6d86Cf251ee7860FB2ACf9f91B9fD4d7", // USDT
+        ],
+        chain::BSC => &[
+            "0x962Bd449E630b0d928f308Ce63f1A21F02576057", // USDC
+            "0x138EB30f73BC423c6455C53df6D89CB01d9eBc63", // USDT
+        ],
+        chain::AVALANCHE => &[
+            "0x5634c4a5FEd09819E3c46D86A965Dd9447d86e47", // USDC
+            "0x12dC9256Acc9895B076f6638D628382881e62CeE", // USDT
+        ],
         _ => return vec![],
     };
-    vec![parse(addr)]
+    addrs.iter().map(|a| parse(a)).collect()
 }
 
 pub fn cctp(chain_id: &str) -> Vec<Address> {
@@ -104,6 +129,7 @@ pub fn connext(chain_id: &str) -> Vec<Address> {
         chain::ETHEREUM => "0x8898B472C54c31894e3B9bb83cEA802a5d0e63C6",
         chain::ARBITRUM => "0xEE9deC2712cCE65174B561151701Bf54b99C24C8",
         chain::OPTIMISM => "0x8f7492DE823025b4CfaAB1D34c58963F2af5DEDA",
+        chain::BASE => "0xB8448C6f7f7887D36DcA487370778e419e9ebE3F",
         chain::POLYGON => "0x11984dc4465481512eb5b777E44061C158CF2259",
         chain::BSC => "0xCd401c10afa37d641d2F594852DA94C700e4F2CE",
         _ => return vec![],
