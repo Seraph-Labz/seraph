@@ -91,7 +91,7 @@ pub fn stargate(chain_id: &str) -> Vec<Address> {
 pub fn cctp(chain_id: &str) -> Vec<Address> {
     // CCTP V2 TokenMessengerV2 — emits DepositForBurn on the source chain.
     // V2 uses the same address on every supported chain (same as LZ V2's pattern).
-    // BSC is not supported by CCTP.
+    // BSC is supported but USYC-only (not USDC) — still a valid CCTP event.
     // Source: https://developers.circle.com/cctp/evm-smart-contracts
     let addr = parse("0x28b5a0e9C621a5BadaA536219b3a228C8168cf5d");
     match chain_id {
@@ -100,7 +100,8 @@ pub fn cctp(chain_id: &str) -> Vec<Address> {
         | chain::OPTIMISM
         | chain::BASE
         | chain::POLYGON
-        | chain::AVALANCHE => vec![addr],
+        | chain::AVALANCHE
+        | chain::BSC => vec![addr],
         _ => vec![],
     }
 }
