@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Mirrors the fmt + clippy jobs in .github/workflows/ci.yml so breakage is
+# caught before push instead of in CI.
+set -euo pipefail
+
+echo "→ cargo fmt --check"
+cargo fmt --all -- --check
+
+echo "→ cargo clippy"
+cargo clippy --workspace --all-targets -- -D warnings
+
+echo "pre-commit checks passed"
