@@ -155,5 +155,5 @@ fn eid_to_chain(eid: u32) -> Option<ChainId> {
 }
 
 #[cfg(test)]
-#[path = "layerzero_v2_tests.rs"]
+#[path = "tests/layerzero_v2.rs"]
 mod tests;
