@@ -7,7 +7,6 @@ use anyhow::Context;
 use seraph_shared::{Config, chain, db};
 use tracing::{error, info};
 
-use adapters::AdapterDispatch;
 use runner::ChainRunner;
 
 struct ChainConfig {
@@ -105,7 +104,7 @@ async fn main() -> anyhow::Result<()> {
             let runner = ChainRunner {
                 chain_id: chain.chain_id.clone(),
                 provider,
-                adapters: vec![AdapterDispatch::NoOp],
+                adapters: adapters::all(),
                 watched_addresses: vec![],
                 start_block: chain.start_block,
                 pool,
