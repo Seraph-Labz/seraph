@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Enforces Conventional Commits style (matches history: feat/fix/chore/docs...)
+set -euo pipefail
+
+commit_msg_file="$1"
+first_line=$(head -n1 "$commit_msg_file")
+
+# Skip merge commits.
+if [[ "$first_line" =~ ^Merge ]]; then
+  exit 0
+fi
+
+pattern='^(feat|fix|chore|docs|refactor|test|perf|style|ci|build|revert)(\([a-z0-9_-]+\))?!?: .+'
+if ! [[ "$first_line" =~ $pattern ]]; then
+  echo "error: commit message must follow Conventional Commits, e.g.:" >&2
+  echo "  feat(indexer): add LayerZero V2 adapter" >&2
+  echo "got: $first_line" >&2
+  exit 1
+fi
