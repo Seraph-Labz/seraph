@@ -15,7 +15,7 @@ fn make_packet(
     p[0] = 1; // version
     p[1..9].copy_from_slice(&nonce.to_be_bytes());
     p[9..13].copy_from_slice(&src_eid.to_be_bytes());
-    p[25..45].copy_from_slice(&sender);   // sender bytes32: zeros[0..12] + address[12..32]
+    p[25..45].copy_from_slice(&sender); // sender bytes32: zeros[0..12] + address[12..32]
     p[45..49].copy_from_slice(&dst_eid.to_be_bytes());
     p[61..81].copy_from_slice(&receiver); // receiver bytes32: same layout
     p[81..113].copy_from_slice(&guid);
@@ -81,7 +81,9 @@ fn parses_valid_packet_sent() {
     let packet = make_packet(42, 30101, sender, 30110, receiver, guid);
     let log = make_log(&packet);
 
-    let event = LayerZeroV2.parse_event(&log).expect("should parse valid PacketSent");
+    let event = LayerZeroV2
+        .parse_event(&log)
+        .expect("should parse valid PacketSent");
 
     assert_eq!(event.protocol_id, "layerzero-v2");
     assert_eq!(event.source_chain, chain::ethereum());
