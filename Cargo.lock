@@ -2598,6 +2598,7 @@ version = "0.1.0"
 dependencies = [
  "alloy",
  "anyhow",
+ "chrono",
  "dotenvy",
  "futures",
  "reqwest 0.12.28",
@@ -2608,6 +2609,7 @@ dependencies = [
  "tokio",
  "tracing",
  "tracing-subscriber",
+ "uuid",
 ]
 
 [[package]]
