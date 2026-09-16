@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 use alloy::primitives::Address;
 use seraph_shared::chain;
 
@@ -188,3 +186,7 @@ pub fn all_addresses(chain_id: &str) -> Vec<Address> {
     addrs.extend(axelar(chain_id));
     addrs
 }
+
+#[cfg(test)]
+#[path = "tests/contracts.rs"]
+mod tests;

@@ -25,7 +25,8 @@ pub struct ChainRunner<P> {
     pub chain_id: ChainId,
     pub provider: P,
     pub adapters: Vec<AdapterDispatch>,
-    /// Contract addresses to watch. Empty = watch all (use only for testing).
+    /// Bridge contract addresses to watch. Must be non-empty — `run` refuses to
+    /// start otherwise, because an empty filter matches every log on the chain.
     pub watched_addresses: Vec<Address>,
     /// Block to sweep from on a cold start, when no cursor has been persisted.
     /// `None` starts at the current tip and indexes no history.
@@ -39,6 +40,16 @@ impl<P: Provider + Clone> ChainRunner<P> {
     /// Index this chain until the connection fails. Returns `Err` on any fault
     /// so the supervisor can back off and restart from the persisted cursor.
     pub async fn run(self) -> Result<()> {
+        // Guarded here as well as at the call site: an unfiltered eth_getLogs
+        // across seven mainnets is the failure this filter exists to prevent,
+        // so it must not be reachable by constructing a runner directly.
+        if self.watched_addresses.is_empty() {
+            return Err(anyhow!(
+                "refusing to start {}: empty address filter would match every log on the chain",
+                self.chain_id
+            ));
+        }
+
         let from = self.resolve_start_block().await?;
         info!(chain = %self.chain_id, from, "chain runner started");
 
@@ -196,10 +207,11 @@ impl<P: Provider + Clone> ChainRunner<P> {
     // ── shared helpers ────────────────────────────────────────────────────────
 
     fn build_filter(&self, from: BlockNumberOrTag, to: Option<BlockNumberOrTag>) -> Filter {
-        let mut f = Filter::new().from_block(from);
-        if !self.watched_addresses.is_empty() {
-            f = f.address(self.watched_addresses.clone());
-        }
+        // Unconditionally address-constrained. `run` rejects an empty list, so
+        // there is no path through here that pulls every log on the chain.
+        let mut f = Filter::new()
+            .from_block(from)
+            .address(self.watched_addresses.clone());
         if let Some(to) = to {
             f = f.to_block(to);
         }

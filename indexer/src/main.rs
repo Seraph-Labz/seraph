@@ -9,7 +9,7 @@ use std::time::Duration;
 
 use anyhow::Context;
 use seraph_shared::{Config, chain, db};
-use tracing::info;
+use tracing::{info, warn};
 
 use supervisor::ChainConfig;
 
@@ -87,10 +87,25 @@ async fn main() -> anyhow::Result<()> {
 
     let handles: Vec<_> = chains
         .into_iter()
-        .map(|(chain_id, wss_url)| {
+        .filter_map(|(chain_id, wss_url)| {
+            // Only the bridge contracts we have adapters for. Without this the
+            // filter is unconstrained and every log on the chain is pulled —
+            // which the reconcile sweep would then repeat on every tick.
+            let watched_addresses = adapters::contracts::all_addresses(&chain_id.0);
+            if watched_addresses.is_empty() {
+                warn!(chain = %chain_id, "no watched contracts for this chain — not indexing it");
+                return None;
+            }
+            info!(
+                chain = %chain_id,
+                contracts = watched_addresses.len(),
+                "watching bridge contracts"
+            );
+
             let chain = ChainConfig {
                 chain_id,
                 wss_url,
+                watched_addresses,
                 start_block,
                 reconcile_interval,
             };
@@ -98,7 +113,7 @@ async fn main() -> anyhow::Result<()> {
 
             // supervise() owns reconnection and never returns, so a chain whose
             // connection drops recovers on its own instead of going dark.
-            tokio::spawn(supervisor::supervise(chain, pool))
+            Some(tokio::spawn(supervisor::supervise(chain, pool)))
         })
         .collect();
 

@@ -1,5 +1,6 @@
 use std::time::{Duration, Instant};
 
+use alloy::primitives::Address;
 use sqlx::PgPool;
 use tracing::{error, warn};
 
@@ -14,6 +15,9 @@ use crate::runner::ChainRunner;
 pub struct ChainConfig {
     pub chain_id: ChainId,
     pub wss_url: String,
+    /// Bridge contracts to watch on this chain. Resolved once at startup and
+    /// reused across reconnects; must be non-empty.
+    pub watched_addresses: Vec<Address>,
     /// Cold-start block, used only when no cursor has been persisted yet.
     pub start_block: Option<u64>,
     pub reconcile_interval: Duration,
@@ -43,10 +47,7 @@ pub async fn supervise(chain: ChainConfig, pool: PgPool) {
                     chain_id: chain.chain_id.clone(),
                     provider: p,
                     adapters: adapters::all(),
-                    // FIXME(#10): still unfiltered, so every log on the chain is
-                    // pulled. The reconcile sweep multiplies the cost of that —
-                    // do not deploy this before #10 wires in contracts.rs.
-                    watched_addresses: vec![],
+                    watched_addresses: chain.watched_addresses.clone(),
                     start_block: chain.start_block,
                     reconcile_interval: chain.reconcile_interval,
                     pool: pool.clone(),
