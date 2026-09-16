@@ -11,3 +11,7 @@ serde_json   = { workspace = true }
 sqlx         = { workspace = true }
 thiserror    = { workspace = true }
 uuid         = { workspace = true }
+
+[dev-dependencies]
+# Integration tests in tests/ need a runtime to drive the async db layer.
+tokio = { workspace = true }

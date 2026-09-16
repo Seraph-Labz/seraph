@@ -205,6 +205,44 @@ pub async fn get_stitched_txs_by_sender(
     .map_err(SeraphError::Database)
 }
 
+// ── chain_cursors ─────────────────────────────────────────────────────────────
+
+/// Last block fully swept for a chain, if the indexer has ever recorded one.
+pub async fn get_chain_cursor(pool: &PgPool, chain_id: &str) -> Result<Option<u64>> {
+    let row =
+        sqlx::query_as::<_, (i64,)>("SELECT last_block FROM chain_cursors WHERE chain_id = $1")
+            .bind(chain_id)
+            .fetch_optional(pool)
+            .await
+            .map_err(SeraphError::Database)?;
+
+    // The CHECK constraint keeps last_block non-negative, so the cast is safe.
+    Ok(row.map(|(block,)| block as u64))
+}
+
+/// Record the last block fully swept.  Never moves a cursor backwards: a runner
+/// restarting mid-sweep would otherwise rewind progress another runner already
+/// made, causing the same range to be re-scanned indefinitely.
+pub async fn upsert_chain_cursor(pool: &PgPool, chain_id: &str, last_block: u64) -> Result<()> {
+    let block = i64::try_from(last_block).map_err(|_| {
+        SeraphError::Parse(format!("block number {last_block} does not fit in BIGINT"))
+    })?;
+
+    sqlx::query(
+        "INSERT INTO chain_cursors (chain_id, last_block)
+         VALUES ($1, $2)
+         ON CONFLICT (chain_id) DO UPDATE SET
+             last_block = GREATEST(chain_cursors.last_block, EXCLUDED.last_block),
+             updated_at = NOW()",
+    )
+    .bind(chain_id)
+    .bind(block)
+    .execute(pool)
+    .await
+    .map(|_| ())
+    .map_err(SeraphError::Database)
+}
+
 // ── protocol_adapters ─────────────────────────────────────────────────────────
 
 pub async fn get_protocol_adapter(pool: &PgPool, id: &str) -> Result<Option<ProtocolAdapterRow>> {
