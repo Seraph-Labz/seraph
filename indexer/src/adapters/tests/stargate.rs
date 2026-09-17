@@ -83,3 +83,68 @@ fn guid_is_correlation_id() {
     let event = Stargate.parse_event(&log).unwrap();
     assert_eq!(event.correlation_id, format!("0x{}", "cc".repeat(32)));
 }
+
+// ── bus-mode transfers ────────────────────────────────────────────────────────
+//
+// Stargate V2 batches transfers onto a bus; OFTSent then fires before any
+// LayerZero packet exists and guid is zero. Confirmed on Base tx
+// 0x2e9b21b090f4f1642ccf5962133ccf66c436f0ce…, whose OFTSent log carries
+// topic[1] == 0x00…00 alongside a BusRode log.
+
+/// The real-world case: a zero guid must not become the correlation_id, or every
+/// bus transfer collapses onto one key.
+#[test]
+fn zero_guid_does_not_become_the_correlation_id() {
+    let log = make_log([0x00; 32], [0x11; 20], 30110, 5_000_000);
+    let event = Stargate.parse_event(&log).expect("should parse OFTSent");
+
+    assert_ne!(event.correlation_id, format!("0x{}", "00".repeat(32)));
+    assert!(
+        event.correlation_id.starts_with("stargate:bus:"),
+        "expected a synthetic bus key, got {}",
+        event.correlation_id
+    );
+    assert_eq!(event.metadata["bus_mode"], true);
+}
+
+/// Two bus transfers in the same transaction differ only by log_index, so the
+/// key has to include it — otherwise they still collide.
+#[test]
+fn bus_transfers_in_one_tx_get_distinct_correlation_ids() {
+    let mut first = make_log([0x00; 32], [0x11; 20], 30110, 5_000_000);
+    first.log_index = Some(3);
+
+    let mut second = make_log([0x00; 32], [0x11; 20], 30110, 5_000_000);
+    second.log_index = Some(7);
+
+    let a = Stargate.parse_event(&first).expect("should parse");
+    let b = Stargate.parse_event(&second).expect("should parse");
+
+    assert_ne!(a.correlation_id, b.correlation_id);
+}
+
+/// Bus keys must not collide across chains for the same tx hash and index.
+#[test]
+fn bus_correlation_id_is_scoped_to_the_source_chain() {
+    let mut on_base = make_log([0x00; 32], [0x11; 20], 30110, 5_000_000);
+    on_base.chain_id = chain::base();
+
+    let mut on_arbitrum = make_log([0x00; 32], [0x11; 20], 30110, 5_000_000);
+    on_arbitrum.chain_id = chain::arbitrum();
+
+    let a = Stargate.parse_event(&on_base).expect("should parse");
+    let b = Stargate.parse_event(&on_arbitrum).expect("should parse");
+
+    assert_ne!(a.correlation_id, b.correlation_id);
+}
+
+/// Taxi mode is unchanged: a real guid is still used directly, so it can join to
+/// the OFTReceived event on the destination chain.
+#[test]
+fn non_zero_guid_is_still_used_directly() {
+    let log = make_log([0xAB; 32], [0x11; 20], 30110, 5_000_000);
+    let event = Stargate.parse_event(&log).expect("should parse OFTSent");
+
+    assert_eq!(event.correlation_id, format!("0x{}", "ab".repeat(32)));
+    assert_eq!(event.metadata["bus_mode"], false);
+}

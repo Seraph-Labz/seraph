@@ -52,10 +52,43 @@ impl Stargate {
 
         let decoded = OFTSent::decode_raw_log(topics, &log.data).ok()?;
 
-        // guid is the LZ V2 packet GUID — the same value appears in the
-        // OFTReceived event on the destination chain, giving the stitcher a
-        // direct join key without any secondary lookup.
-        let correlation_id = decoded.guid.to_string();
+        // ── guid is zero for bus-mode transfers ───────────────────────────────
+        //
+        // In "taxi" mode the transfer gets its own LayerZero packet immediately
+        // and guid is the packet GUID, which also appears in OFTReceived on the
+        // destination — a direct join key.
+        //
+        // In "bus" mode Stargate batches transfers. OFTSent fires when a transfer
+        // boards the bus, before any packet exists, so guid is zero(bytes32). The
+        // real GUID is only assigned later by BusDriven, in a different
+        // transaction.
+        //
+        // Verified against Base tx 0x2e9b21b090f4f1642ccf5962133ccf66c436f0ce…:
+        // the OFTSent log has topic[1] == 0x00…00 while every other field decodes
+        // correctly, and the same transaction carries a BusRode log plus a LI.FI
+        // "stargateV2Bus" marker.
+        //
+        // Falling back to a per-log key keeps each transfer distinct. Without it
+        // every bus transfer shares correlation_id 0x00…00, and because
+        // stitched_transactions has a UNIQUE constraint on correlation_id the
+        // stitcher would fold all Stargate traffic into a single journey.
+        //
+        // This fallback key cannot join to the destination event. Doing that
+        // needs BusRode's ticketId and BusDriven's guid, which live in sibling
+        // logs this adapter cannot see — parse_event is handed one log at a
+        // time. Tracked in #12.
+        let correlation_id = if decoded.guid == B256::ZERO {
+            format!(
+                "stargate:bus:{}:{}:{}",
+                log.chain_id,
+                log.tx_hash.as_deref().unwrap_or("unknown"),
+                log.log_index.unwrap_or_default()
+            )
+        } else {
+            decoded.guid.to_string()
+        };
+
+        let bus_mode = decoded.guid == B256::ZERO;
         let dest_chain = eid_to_chain(decoded.dstEid);
 
         let now = Utc::now();
@@ -79,6 +112,9 @@ impl Stargate {
                 "dst_eid":            decoded.dstEid,
                 "amount_received_ld": decoded.amountReceivedLD.to_string(),
                 "pool_address":       log.address,
+                // Flags a synthetic correlation_id that cannot join to a
+                // destination event, so the stitcher can tell the two apart.
+                "bus_mode":           bus_mode,
             }),
             created_at: now,
             updated_at: now,
